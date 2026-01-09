@@ -1,0 +1,9 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "agentic-plugins",
+  "description": "Claude Code plugins for building AI agents across frameworks",
+  "owner": {
+    "name": "MattMagg"
+  },
+  "plugins": []
+}
