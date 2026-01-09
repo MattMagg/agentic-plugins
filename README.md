@@ -18,11 +18,10 @@ Then install plugins:
 
 | Plugin | Framework | Description |
 |--------|-----------|-------------|
-| *coming soon* | | |
+| [adk-builder](./adk-builder) | Google ADK | Autonomous development with planning, coding, debugging agents |
 
 ## Plugin Roadmap
 
-- **adk-builder** - Google ADK (Agent Development Kit)
 - **openai-agents** - OpenAI Agents SDK
 - *more to come*
 
