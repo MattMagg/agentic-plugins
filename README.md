@@ -6,7 +6,7 @@ Claude Code plugins for building AI agents across frameworks.
 
 Add this marketplace:
 ```bash
-/plugin marketplace add https://github.com/MattMagg/agentic-plugins.git
+/plugin marketplace add MattMagg/agentic-plugins
 ```
 
 Then install plugins:

@@ -14,7 +14,7 @@ ADK Builder is a Claude Code plugin that provides an intelligent, multi-agent wo
 ## Installation
 
 ```bash
-/plugin marketplace add https://github.com/MattMagg/agentic-plugins.git
+/plugin marketplace add MattMagg/agentic-plugins
 /plugin install adk-builder@agentic-plugins
 ```
 
