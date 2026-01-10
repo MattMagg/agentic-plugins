@@ -1,134 +1,85 @@
-# ADK Builder Plugin
+# ADK Builder
 
-Autonomous Google ADK development with specialized agents for planning, coding, debugging, and verification.
-
-## Overview
-
-ADK Builder is a Claude Code plugin that provides an intelligent, multi-agent workflow for building Google Agent Development Kit (ADK) applications. Instead of manually coding agents, the plugin guides you through a deliberate process:
-
-1. **Plan** - Understand requirements, clarify ambiguity, present options
-2. **Execute** - Implement step by step with verification
-3. **Debug** - Diagnose and fix issues systematically
-4. **Verify** - Validate completion against requirements
+A Claude Code plugin for building Google Agent Development Kit applications with spec-driven workflows and unified orchestration.
 
 ## Installation
 
 ```bash
+# Add marketplace
 /plugin marketplace add MattMagg/agentic-plugins
+
+# Install plugin
 /plugin install adk-builder@agentic-plugins
-```
-
-## Agents
-
-The plugin provides four specialized agents:
-
-| Agent | Color | Purpose |
-|-------|-------|---------|
-| **adk-planner** | Cyan | Contemplates, clarifies, plans implementation |
-| **adk-executor** | Green | Implements plans step by step |
-| **adk-debugger** | Red | Diagnoses and fixes issues |
-| **adk-verifier** | Yellow | Validates completion |
-
-### Workflow
-
-```
-User Request → adk-planner (contemplate, clarify, plan)
-                    ↓
-              User Approval
-                    ↓
-            adk-executor (implement step-by-step)
-                    ↓
-            adk-verifier (validate completion)
-                    ↓
-              [If errors: adk-debugger]
 ```
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `/adk-init` | Initialize new ADK project |
-| `/adk-create-agent` | Create agent with type selection |
-| `/adk-add-tool` | Add tool to existing agent |
-| `/adk-deploy` | Deploy to production |
-| `/adk-add-behavior` | Add callbacks, state, events |
-| `/adk-multi-agent` | Set up multi-agent system |
-| `/adk-add-memory` | Add memory or grounding |
-| `/adk-secure` | Add security features |
-| `/adk-streaming` | Enable streaming responses |
-| `/adk-test` | Create tests and evaluations |
+### `/adk` - Main Entry Point
+
+The unified command that detects your project state and enters the appropriate mode:
+
+- **SPEC Mode**: No project exists → Interactive requirements gathering
+- **PLAN Mode**: Has spec → Generate implementation steps
+- **BUILD Mode**: Has plan or direct task → Implement
+
+```bash
+/adk                    # Auto-detect mode
+/adk --spec             # Force spec mode
+/adk --plan             # Force plan mode
+/adk customer-support   # Start new feature
+```
+
+### `/adk-debug` - Diagnostics
+
+Systematic debugging for ADK issues:
+
+```bash
+/adk-debug              # General diagnostic
+/adk-debug "tool not found"  # Specific error
+```
+
+## Project Structure
+
+When you run `/adk`, it creates:
+
+```
+your-repo/
+├── adk-builder/
+│   └── feature-name/
+│       ├── spec.md      # Requirements and decisions
+│       ├── plan.md      # Implementation steps
+│       └── session.md   # Progress tracking
+└── .claude/
+    └── adk-builder.local.md  # Plugin state
+```
 
 ## Skills
 
-The plugin includes 11 ADK domain skills:
+The plugin includes consolidated knowledge across 6 skill areas:
 
-| Skill | Triggers |
-|-------|----------|
-| `@adk-getting-started` | project setup, initialization |
-| `@adk-agents` | LlmAgent, BaseAgent, models |
-| `@adk-tools` | FunctionTool, MCP, OpenAPI |
-| `@adk-behavior` | callbacks, state, events |
-| `@adk-multi-agent` | delegation, orchestration |
-| `@adk-memory` | MemoryService, RAG, grounding |
-| `@adk-security` | guardrails, authentication |
-| `@adk-streaming` | SSE, bidirectional, Live API |
-| `@adk-deployment` | Agent Engine, Cloud Run, GKE |
-| `@adk-quality` | evals, tracing, logging |
-| `@adk-advanced` | visual builder, ThinkingConfig |
+| Skill | Topics |
+|-------|--------|
+| `@adk-core` | Project init, agent creation, configuration |
+| `@adk-tools` | Function tools, MCP, OpenAPI, built-ins |
+| `@adk-behavior` | Callbacks, state, memory, events |
+| `@adk-orchestration` | Multi-agent, streaming, routing |
+| `@adk-production` | Deployment, security, quality |
+| `@adk-advanced` | Extended thinking, visual builder |
 
-## Usage Examples
+## Workflow
 
-### Create a New Agent
+1. **Start**: `/adk my-feature`
+2. **Spec**: Answer questions, make decisions
+3. **Plan**: Review generated implementation steps
+4. **Build**: Execute plan or make direct changes
+5. **Debug**: `/adk-debug` if issues arise
 
+## Scripts
+
+```bash
+# Initialize new spec (used internally by /adk)
+scripts/init-spec.sh <feature-name>
+
+# Validate spec completeness
+scripts/validate-spec.py adk-builder/<feature>/spec.md
 ```
-> I want to build a customer support agent
-
-[adk-planner activates]
-"I'll help you plan this. What should the agent handle?
-1. General inquiries
-2. Billing questions
-3. Technical support
-4. All of the above"
-
-> All of the above
-
-"I recommend a multi-agent delegation pattern with specialized sub-agents..."
-[presents plan]
-
-> Proceed
-
-[adk-executor implements]
-[adk-verifier validates]
-```
-
-### Add a Tool
-
-```
-> /adk-add-tool weather lookup
-
-[adk-planner activates]
-"For weather lookup, I recommend a FunctionTool that calls a weather API..."
-```
-
-### Debug an Issue
-
-```
-> My agent won't start - "tool not found" error
-
-[adk-debugger activates]
-"Let me diagnose this. The error 'tool not found' typically means..."
-[provides fix]
-```
-
-## Contributing
-
-Contributions welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Follow the existing patterns
-4. Submit a pull request
-
-## License
-
-MIT

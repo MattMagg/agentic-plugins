@@ -1,9 +1,12 @@
 {
   "name": "adk-builder",
-  "version": "2.0.0",
-  "description": "Autonomous Google ADK development with specialized agents for planning, coding, debugging, and verification",
+  "version": "3.0.0",
+  "description": "Unified Google ADK development with spec-driven workflows, mode-based orchestration, and consolidated knowledge base",
   "author": {
     "name": "ADK Builder Contributors"
   },
-  "keywords": ["adk", "google", "agents", "autonomous", "gemini", "vertex-ai"]
+  "keywords": ["adk", "google", "agents", "gemini", "vertex-ai", "spec-driven"],
+  "commands": "./commands",
+  "skills": "./skills",
+  "scripts": "./scripts"
 }
