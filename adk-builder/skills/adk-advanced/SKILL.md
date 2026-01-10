@@ -1,7 +1,7 @@
 ---
 name: ADK Advanced
 description: This skill should be used when the user asks about "visual builder", "no-code agent builder", "drag and drop", "ThinkingConfig", "extended thinking", "chain of thought", "reasoning", or needs guidance on using ADK's visual development tools or configuring advanced reasoning capabilities.
-version: 2.0.0
+version: 3.0.0
 ---
 
 # ADK Advanced Features
@@ -18,9 +18,9 @@ Guide for advanced ADK features including visual building and extended thinking.
 
 ## When NOT to Use
 
-- Standard agent creation → Use `@adk-agents` instead
+- Standard agent creation → Use `@adk-core` instead
 - Tool integration → Use `@adk-tools` instead
-- Multi-agent systems → Use `@adk-multi-agent` instead
+- Multi-agent systems → Use `@adk-orchestration` instead
 
 ## Key Concepts
 
