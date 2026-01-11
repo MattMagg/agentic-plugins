@@ -18,7 +18,7 @@ Then install plugins:
 
 | Plugin | Framework | Description |
 |--------|-----------|-------------|
-| [adk-builder](./adk-builder) | Google ADK | Autonomous development with planning, coding, debugging agents |
+| [adk-builder](./plugins/adk-builder) | Google ADK | Autonomous development with planning, coding, debugging agents |
 
 ## Plugin Roadmap
 
@@ -29,8 +29,8 @@ Then install plugins:
 
 To add a plugin:
 
-1. Create a folder: `your-plugin/`
+1. Create a folder: `plugins/your-plugin/`
 2. Add `.claude-plugin/plugin.json` inside it
 3. Add your agents, skills, commands
-4. Update `marketplace.json` to include your plugin
+4. Update `.claude-plugin/marketplace.json` to include your plugin
 5. Submit a PR

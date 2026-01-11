@@ -9,7 +9,7 @@
     {
       "name": "adk-builder",
       "description": "Autonomous Google ADK development with specialized agents for planning, coding, debugging, and verification",
-      "source": "./adk-builder",
+      "source": "./plugins/adk-builder",
       "category": "development"
     }
   ]

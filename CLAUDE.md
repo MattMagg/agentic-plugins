@@ -14,13 +14,14 @@ This is a Claude Code plugin marketplace for agentic development frameworks. Cur
 agentic-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json      # Plugin registry (add new plugins here)
-├── adk-builder/              # Google ADK plugin
-│   ├── .claude-plugin/
-│   │   └── plugin.json       # Plugin manifest (version, entry points)
-│   ├── commands/             # User-invocable slash commands
-│   ├── skills/               # Knowledge base (6 skill clusters)
-│   └── scripts/              # Automation (Bash/Python)
-└── <future-plugins>/         # Same structure as adk-builder
+└── plugins/
+    ├── adk-builder/          # Google ADK plugin
+    │   ├── .claude-plugin/
+    │   │   └── plugin.json   # Plugin manifest (version, entry points)
+    │   ├── commands/         # User-invocable slash commands
+    │   ├── skills/           # Knowledge base (6 skill clusters)
+    │   └── scripts/          # Automation (Bash/Python)
+    └── <future-plugins>/     # Same structure as adk-builder
 ```
 
 ### Plugin Components
@@ -40,15 +41,15 @@ agentic-plugins/
 
 The `/adk` command tracks state in:
 - `.claude/adk-builder.local.md` - Plugin state (current feature, phase, progress)
-- `adk-builder/<feature>/spec.md` - Requirements
-- `adk-builder/<feature>/plan.md` - Implementation steps
-- `adk-builder/<feature>/session.md` - Build progress log
+- `plugins/adk-builder/<feature>/spec.md` - Requirements
+- `plugins/adk-builder/<feature>/plan.md` - Implementation steps
+- `plugins/adk-builder/<feature>/session.md` - Build progress log
 
 ## Development Workflow
 
 ### Adding a New Plugin
 
-1. Create `<plugin-name>/.claude-plugin/plugin.json`:
+1. Create `plugins/<plugin-name>/.claude-plugin/plugin.json`:
    ```json
    {
      "name": "plugin-name",
@@ -74,13 +75,18 @@ When editing skills:
 - Keep trigger keywords in the `description` field accurate
 - Reference guides should be self-contained with code examples
 
-### Testing Commands
+### Testing Locally
 
-Commands can be tested by installing the plugin locally:
+Test plugins by adding the marketplace from a local path:
 ```bash
-/plugin marketplace add /path/to/agentic-plugins
+/plugin marketplace add ./path/to/agentic-plugins
 /plugin install adk-builder@agentic-plugins
 /adk  # Test the command
+```
+
+Validate marketplace structure:
+```bash
+/plugin validate .
 ```
 
 ## Skill Cluster Reference
@@ -96,8 +102,8 @@ Commands can be tested by installing the plugin locally:
 
 ## File Conventions
 
-- Command files: `commands/<command-name>.md`
-- Skill definitions: `skills/<skill-name>/SKILL.md`
-- Skill references: `skills/<skill-name>/references/<topic>.md`
-- Spec templates: `.templates/spec-template.md`
-- Plugin state: `.claude-plugin/CLAUDE.md` (auto-managed)
+- Command files: `plugins/<plugin>/commands/<command-name>.md`
+- Skill definitions: `plugins/<plugin>/skills/<skill-name>/SKILL.md`
+- Skill references: `plugins/<plugin>/skills/<skill-name>/references/<topic>.md`
+- Plugin manifest: `plugins/<plugin>/.claude-plugin/plugin.json`
+- Marketplace registry: `.claude-plugin/marketplace.json`
