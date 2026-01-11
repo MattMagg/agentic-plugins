@@ -1,10 +1,12 @@
 {
   "name": "adk-builder",
-  "version": "3.0.0",
-  "description": "Unified Google ADK development with spec-driven workflows, mode-based orchestration, and consolidated knowledge base",
+  "version": "3.1.0",
+  "description": "Google ADK development with spec-driven workflows and specialized subagents",
   "author": {
     "name": "ADK Builder Contributors"
   },
-  "keywords": ["adk", "google", "agents", "gemini", "vertex-ai", "spec-driven"],
-  "commands": "./commands"
+  "keywords": ["adk", "google", "agents", "gemini", "vertex-ai", "spec-driven", "subagents"],
+  "license": "MIT",
+  "commands": "./commands",
+  "agents": "./agents"
 }
