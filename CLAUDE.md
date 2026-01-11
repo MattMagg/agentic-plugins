@@ -69,14 +69,26 @@ The `/adk` command tracks state in:
 
 ### Testing Locally
 
-Test plugins by adding the marketplace from a local path:
+**For development (recommended):** Use `--plugin-dir` to load directly from source, bypassing the cache:
+
+```bash
+# From repo root - loads plugin without installation
+claude --plugin-dir ./plugins/adk-builder
+```
+
+Edits to plugin files are live on next Claude restart. No reinstallation needed.
+
+**For release testing:** Install via marketplace to test the full install flow:
+
 ```bash
 /plugin marketplace add ./path/to/agentic-plugins
 /plugin install adk-builder@agentic-plugins
 /adk  # Test the command
 ```
 
-Validate marketplace structure:
+Note: Installed plugins are cached. After edits, you must reinstall or bump the version.
+
+**Validate marketplace structure:**
 ```bash
 /plugin validate .
 ```

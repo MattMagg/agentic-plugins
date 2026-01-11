@@ -12,6 +12,20 @@ A Claude Code plugin for building Google Agent Development Kit applications with
 /plugin install adk-builder@agentic-plugins
 ```
 
+## Development
+
+For active plugin development, use `--plugin-dir` to load directly from source (bypasses cache):
+
+```bash
+# From the agentic-plugins repo root
+claude --plugin-dir ./plugins/adk-builder
+
+# Or with absolute path from anywhere
+claude --plugin-dir /path/to/agentic-plugins/plugins/adk-builder
+```
+
+This avoids stale cache issues - edits are live on next Claude restart.
+
 ## Commands
 
 ### `/adk` - Main Entry Point
