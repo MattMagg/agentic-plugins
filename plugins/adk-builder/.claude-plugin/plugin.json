@@ -6,7 +6,5 @@
     "name": "ADK Builder Contributors"
   },
   "keywords": ["adk", "google", "agents", "gemini", "vertex-ai", "spec-driven"],
-  "commands": "./commands",
-  "skills": "./skills",
-  "scripts": "./scripts"
+  "commands": "./commands"
 }

@@ -1,14 +1,16 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "agentic-plugins",
-  "description": "Claude Code plugins for building AI agents across frameworks",
   "owner": {
     "name": "MattMagg"
+  },
+  "metadata": {
+    "description": "Claude Code plugins for building AI agents across frameworks"
   },
   "plugins": [
     {
       "name": "adk-builder",
-      "description": "Autonomous Google ADK development with specialized agents for planning, coding, debugging, and verification",
+      "description": "Autonomous Google ADK development with spec-driven workflows",
       "source": "./plugins/adk-builder",
       "category": "development"
     }

@@ -13,29 +13,25 @@ This is a Claude Code plugin marketplace for agentic development frameworks. Cur
 ```
 agentic-plugins/
 ├── .claude-plugin/
-│   └── marketplace.json      # Plugin registry (add new plugins here)
+│   └── marketplace.json      # Plugin registry
 └── plugins/
-    ├── adk-builder/          # Google ADK plugin
-    │   ├── .claude-plugin/
-    │   │   └── plugin.json   # Plugin manifest (version, entry points)
-    │   ├── commands/         # User-invocable slash commands
-    │   ├── skills/           # Knowledge base (6 skill clusters)
-    │   └── scripts/          # Automation (Bash/Python)
-    └── <future-plugins>/     # Same structure as adk-builder
+    └── adk-builder/
+        ├── .claude-plugin/
+        │   └── plugin.json   # Plugin manifest
+        └── commands/         # Slash commands (declared in manifest)
 ```
 
-### Plugin Components
+### Plugin Manifest
 
-**Commands** (`commands/*.md`): Slash commands with YAML frontmatter defining `name`, `description`, `allowed-tools`. The `/adk` command is the main orchestrator with mode-based behavior (SPEC → PLAN → BUILD).
+Per official docs, valid `plugin.json` fields:
+- **Metadata**: `name`, `version`, `description`, `author`, `keywords`, `homepage`, `repository`, `license`
+- **Components**: `commands`, `agents`, `hooks`, `mcpServers`, `lspServers`
 
-**Skills** (`skills/<name>/`): Each skill has:
-- `SKILL.md` - Frontmatter with version, description, trigger keywords
-- `references/` - Detailed markdown guides
-- Skills are referenced via `@skill-name` syntax in specs/plans
+**NOT valid**: `skills`, `scripts` (these are just directories commands can read)
 
-**Scripts** (`scripts/`): Shell and Python automation. Currently:
-- `init-spec.sh <name>` - Scaffold new spec from template
-- `validate-spec.py <spec-path>` - Validate spec completeness
+### Commands
+
+Command files (`commands/*.md`) use YAML frontmatter with `name`, `description`. The `/adk` command is the main entry point.
 
 ### State Management
 
@@ -54,26 +50,22 @@ The `/adk` command tracks state in:
    {
      "name": "plugin-name",
      "version": "1.0.0",
-     "commands": "./commands",
-     "skills": "./skills",
-     "scripts": "./scripts"
+     "description": "Brief description",
+     "commands": "./commands"
    }
    ```
 
-2. Add to `.claude-plugin/marketplace.json` plugins array
+2. Add to `.claude-plugin/marketplace.json` plugins array:
+   ```json
+   {
+     "name": "plugin-name",
+     "description": "Description for marketplace",
+     "source": "./plugins/plugin-name",
+     "category": "development"
+   }
+   ```
 
-3. Create commands, skills, and scripts following `adk-builder` patterns
-
-### Modifying Skills
-
-Skills use a two-level structure:
-- `SKILL.md` - Summary with trigger keywords (what Claude sees first)
-- `references/*.md` - Detailed guides (loaded on demand)
-
-When editing skills:
-- Update version in `SKILL.md` frontmatter when making breaking changes
-- Keep trigger keywords in the `description` field accurate
-- Reference guides should be self-contained with code examples
+3. Create command files in `commands/` directory
 
 ### Testing Locally
 
@@ -89,7 +81,9 @@ Validate marketplace structure:
 /plugin validate .
 ```
 
-## Skill Cluster Reference
+## ADK Builder Skills (internal)
+
+The adk-builder plugin includes knowledge files in `skills/` that commands reference via `@skill-name` syntax. These are NOT part of the official plugin manifest - just markdown files commands can read.
 
 | Skill | Purpose |
 |-------|---------|
@@ -102,8 +96,6 @@ Validate marketplace structure:
 
 ## File Conventions
 
-- Command files: `plugins/<plugin>/commands/<command-name>.md`
-- Skill definitions: `plugins/<plugin>/skills/<skill-name>/SKILL.md`
-- Skill references: `plugins/<plugin>/skills/<skill-name>/references/<topic>.md`
+- Marketplace: `.claude-plugin/marketplace.json`
 - Plugin manifest: `plugins/<plugin>/.claude-plugin/plugin.json`
-- Marketplace registry: `.claude-plugin/marketplace.json`
+- Commands: `plugins/<plugin>/commands/<name>.md`
