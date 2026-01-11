@@ -2,6 +2,10 @@
 .claude
 .mcp.json
 
+# Internal
+plans/
+evals/
+
 # Python
 __pycache__/
 *.py[cod]
