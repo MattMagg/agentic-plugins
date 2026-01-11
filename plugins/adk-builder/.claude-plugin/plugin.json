@@ -1,12 +1,11 @@
 {
   "name": "adk-builder",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Google ADK development with spec-driven workflows and specialized subagents",
   "author": {
     "name": "ADK Builder Contributors"
   },
   "keywords": ["adk", "google", "agents", "gemini", "vertex-ai", "spec-driven", "subagents"],
   "license": "MIT",
-  "commands": "./commands",
-  "agents": "./agents"
+  "commands": "./commands"
 }
