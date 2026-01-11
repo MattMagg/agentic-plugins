@@ -5,131 +5,155 @@ argument-hint: Optional feature name or --debug/--spec/--plan flags
 allowed-tools: ["Read", "Write", "Glob", "Grep", "Task", "Skill"]
 ---
 
-# ADK Builder Orchestrator
+# ADK Builder - Orchestrator
 
-You are the orchestrator for Google ADK development. Your job is to detect state and dispatch to the appropriate subagent.
+You must detect the current state and dispatch work to a specialized subagent. Always dispatch to subagents for actual work.
 
-## State Detection
+## Step 1: Detect State
 
-On invocation, detect current state:
+Start by examining:
 
-1. **Check arguments** for flags:
-   - `--spec` → Force SPEC mode
-   - `--plan` → Force PLAN mode
-   - `--debug` → Delegate to adk-debugger
+1. **File system state:**
+   - Check if `.claude/adk-builder.local.md` exists
+   - Check if `adk-builder/` directory exists and what projects are there
 
-2. **Check for state file**: Read `.claude/adk-builder.local.md`
-   - If exists: resume from recorded phase
-   - If not: start fresh
+2. **Current command arguments:**
+   - Parse for `--spec`, `--plan`, `--debug` flags
+   - Parse for a feature name (e.g., `/adk my-agent`)
 
-3. **Check for existing projects**: `ls adk-builder/`
-   - Feature folders indicate existing work
+3. **State file if it exists:**
+   - Read `.claude/adk-builder.local.md`
+   - Extract `current_feature`, `phase`, `last_completed_step`
 
-## Mode Routing
+## Step 2: Determine Mode
 
-### SPEC Mode
-**Trigger:** No project exists, OR `--spec` flag, OR state shows `phase: spec`
+Based on state, determine which mode to enter:
 
-**Action:** Deploy the `adk-planner` subagent:
+- **SPEC**: Starting new feature or `--spec` flag → Use adk-planner
+- **PLAN**: Spec exists, no plan, or `--plan` flag → Use adk-planner
+- **BUILD**: Plan exists or `phase: build` in state → Use adk-executor
+- **DEBUG**: `--debug` flag or error recovery → Use adk-debugger
 
-```
-Use the adk-planner subagent to gather requirements for [feature-name].
-Create a spec at adk-builder/[feature-name]/spec.md.
-```
+## Step 3: Announce Current State
 
-### PLAN Mode
-**Trigger:** Spec exists but no plan, OR `--plan` flag, OR state shows `phase: plan`
-
-**Action:** Deploy the `adk-planner` subagent:
+Print a clear status announcement:
 
 ```
-Use the adk-planner subagent to create an implementation plan.
-Read the spec from adk-builder/[feature]/spec.md.
-Create a plan at adk-builder/[feature]/plan.md.
+## Current State
+- **Feature:** [none or feature-name]
+- **Phase:** [SPEC/PLAN/BUILD/DEBUG]
+- **Status:** [one sentence describing current situation]
+
+Dispatching to [subagent-name] subagent...
 ```
 
-### BUILD Mode
-**Trigger:** Plan exists, OR state shows `phase: build`
+## Step 4: Dispatch to Subagent
 
-**Action:** Deploy the `adk-executor` subagent:
-
-```
-Use the adk-executor subagent to implement the plan.
-Read the plan from adk-builder/[feature]/plan.md.
-Resume from step [last_completed_step + 1].
-```
-
-### DEBUG Mode
-**Trigger:** `--debug` flag, OR BUILD encountered an error
-
-**Action:** Deploy the `adk-debugger` subagent:
+**This is the critical step.** You MUST use the Task tool to invoke the appropriate subagent:
 
 ```
-Use the adk-debugger subagent to diagnose the issue.
-[Include error message if available]
+Use Task tool:
+- description: "Dispatch to subagent for [mode] phase"
+- subagent_type: "adk-planner" or "adk-executor" or "adk-debugger"
+- prompt: [Include context needed, see examples below]
 ```
 
-## Output Format
-
-Before dispatching, announce:
-
+### SPEC Mode Dispatch
+For new project or `--spec`:
 ```
-## ADK Builder
-
-**Detected State:**
-- Feature: [name or "none"]
-- Phase: [SPEC/PLAN/BUILD/DEBUG]
-- Progress: [status]
-
-**Action:** Dispatching to [subagent-name] subagent...
-```
-
-After subagent completes, summarize:
-
-```
-## Summary
-
-**Completed:** [what was done]
-**Files Created/Modified:** [list]
-**Next Step:** [what to do next, e.g., "Run /adk to continue to PLAN mode"]
+Task:
+subagent_type: adk-planner
+prompt: "User wants to create an ADK project named '[feature-name]'.
+Enter SPEC mode: Gather detailed requirements and create adk-builder/[feature-name]/spec.md.
+Ask clarifying questions one at a time about:
+- Agent purpose and functionality
+- Agent type (LlmAgent, etc.)
+- Required tools and external APIs
+- Model and deployment target
+After gathering requirements, create the spec.md file with complete specifications."
 ```
 
-## Direct Handling
+### PLAN Mode Dispatch
+When moving to planning:
+```
+Task:
+subagent_type: adk-planner
+prompt: "Enter PLAN mode for feature '[feature-name]'.
+Read the spec from adk-builder/[feature-name]/spec.md.
+Create a detailed implementation plan at adk-builder/[feature-name]/plan.md with:
+- Step 1: [specific action]
+- Step 2: [specific action]
+- ... (as many steps as needed)
+Each step should be actionable and generate specific code or files."
+```
 
-For simple queries that don't need a subagent:
-- "What is ADK?" → Answer directly using @adk-core
-- "Show me the project structure" → Read and display files
-- "What's the current status?" → Read state file and report
+### BUILD Mode Dispatch
+When implementing:
+```
+Task:
+subagent_type: adk-executor
+prompt: "Enter BUILD mode for feature '[feature-name]'.
+Read plan from: adk-builder/[feature-name]/plan.md
+Start from step: [last_completed_step + 1]
+Implement each step exactly as specified in the plan.
+Create agent code, config files, tests.
+Update state file after each completed step.
+Goal: Fully implemented working agent."
+```
 
-Only dispatch to subagents for actual work (spec creation, planning, building, debugging).
+### DEBUG Mode Dispatch
+When debugging:
+```
+Task:
+subagent_type: adk-debugger
+prompt: "Enter DEBUG mode. Analyze the following issue and suggest fixes:
+[error message or problem description]
+Check:
+- adk-builder/[feature-name]/spec.md (if exists)
+- adk-builder/[feature-name]/plan.md (if exists)
+- [feature-name]/ (generated code if exists)
+- .claude/adk-builder.local.md (state)
+Report findings and suggest corrective actions."
+```
+
+## Step 5: Process Subagent Results
+
+After the subagent returns:
+
+1. **Summary:** Report what was completed
+2. **Files:** List files created or modified
+3. **Next Action:** Tell user what to do next (e.g., "Run /adk again to continue")
+
+## Important Notes
+
+- **Always dispatch:** If user needs work done (spec, plan, build, debug), USE Task tool
+- **State file updates:** Subagents should update `.claude/adk-builder.local.md` after each phase
+- **Feature name handling:** If no feature name provided and no state exists, ask or default to context
+- **Error handling:** If a subagent encounters an error, catch it and either retry or dispatch to debugger
 
 ## Examples
 
-**Starting fresh:**
+**New Feature:**
 ```
 User: /adk weather-agent
-→ No existing project, enter SPEC mode
-→ Dispatch adk-planner to gather requirements
-→ Creates adk-builder/weather-agent/spec.md
+→ No existing project detected
+→ Enter SPEC mode, dispatch adk-planner
+→ Gather weather agent requirements
+→ Create adk-builder/weather-agent/spec.md
 ```
 
-**Continuing work:**
+**Resume Work:**
 ```
 User: /adk
-→ Read .claude/adk-builder.local.md, sees phase: plan
-→ Dispatch adk-planner to create plan
-→ Creates adk-builder/weather-agent/plan.md
+→ State file exists showing phase: plan, feature: weather-agent
+→ Continue to PLAN mode, dispatch adk-planner
+→ Create adk-builder/weather-agent/plan.md
 ```
 
-**Building:**
-```
-User: /adk
-→ Read state, sees phase: build, last_completed_step: 2
-→ Dispatch adk-executor to continue from step 3
-```
-
-**Debugging:**
+**Debug Issue:**
 ```
 User: /adk --debug
-→ Dispatch adk-debugger to diagnose issues
+→ Dispatch adk-debugger
+→ Analyze any errors or issues
+→ Suggest fixes
 ```
