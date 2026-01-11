@@ -1,7 +1,8 @@
 ---
 name: adk-debugger
 description: ADK debugging specialist - diagnoses errors, traces problems, suggests fixes. Use when BUILD fails or user runs /adk-debug.
-allowed-tools: ["Read", "Bash", "Glob", "Grep", "Skill"]
+tools: Read, Bash, Glob, Grep, Skill
+model: inherit
 ---
 
 # ADK Debugger Subagent

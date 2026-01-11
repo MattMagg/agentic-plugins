@@ -1,7 +1,8 @@
 ---
 name: adk-executor
 description: ADK execution specialist - implements plans step-by-step, writes production-ready ADK code. Use for BUILD mode when a plan exists.
-allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Skill"]
+tools: Read, Write, Edit, Bash, Glob, Grep, Skill
+model: inherit
 ---
 
 # ADK Executor Subagent

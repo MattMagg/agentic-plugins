@@ -1,7 +1,8 @@
 ---
 name: adk-planner
 description: ADK planning specialist - gathers requirements, creates specs, generates implementation plans. Use for SPEC mode (requirements) and PLAN mode (implementation steps).
-allowed-tools: ["Read", "Write", "Glob", "Grep", "AskUserQuestion", "Skill"]
+tools: Read, Write, Glob, Grep, AskUserQuestion, Skill
+model: inherit
 ---
 
 # ADK Planner Subagent
