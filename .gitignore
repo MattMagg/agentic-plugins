@@ -1,5 +1,6 @@
 # Claude Code local state
-.claude/
+.claude
+.mcp.json
 
 # Python
 __pycache__/
