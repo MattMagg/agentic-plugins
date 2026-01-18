@@ -49,7 +49,7 @@ Check the prompt for MODE indicator:
    **Question 2: Agent Type**
    Query RAG first:
    ```
-   mcp__agentic-rag__query_docs("agent types", frameworks=[chosen])
+   mcp__agentic-rag__search("agent types", mode="explain")
    ```
    Then ask:
    ```
@@ -155,8 +155,8 @@ Check the prompt for MODE indicator:
 
    For each major component in spec:
    ```
-   mcp__agentic-rag__query_code("[component] implementation", frameworks=[fw])
-   mcp__agentic-rag__search_patterns("[pattern_type]", "[framework]")
+   mcp__agentic-rag__search("[component] implementation", mode="build")
+   mcp__agentic-rag__query_sdk("[pattern_type]", sdk="[framework]", mode="build")
    ```
 
 3. **Design Implementation Steps**
@@ -259,7 +259,7 @@ Run `/agentic` to continue to [next phase]
 
 - `mcp__agentic-rag__query_docs(query, frameworks, top_k)`
 - `mcp__agentic-rag__query_code(query, frameworks, top_k)`
-- `mcp__agentic-rag__search_patterns(pattern_type, framework, top_k)`
+- `mcp__agentic-rag__search(pattern_type, framework, top_k, mode="build")`
 - `mcp__agentic-rag__list_frameworks()`
 
 ## Skills to Reference

@@ -24,7 +24,7 @@ description: Workflow patterns and gotchas for OpenAI Agents SDK. Directs to RAG
 | Persistent context | Memory | `"agent memory conversation"` |
 | Background processing | Async runner | `"async agent runner"` |
 
-**Query RAG**: `mcp__agentic-rag__query_code("pattern name", frameworks=["openai"])`
+**Query RAG**: `mcp__agentic-rag__query_sdk("pattern name", sdk="openai", mode="build")`
 
 ## Critical Gotchas
 
@@ -40,24 +40,24 @@ These cause silent failures or confusion:
 ## Workflow: Creating an OpenAI Agent
 
 ### Step 1: Environment Setup
-**RAG Query**: `mcp__agentic-rag__query_docs("openai agents installation", frameworks=["openai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("openai agents installation", sdk="openai", mode="explain")`
 
 ### Step 2: Basic Agent
-**RAG Query**: `mcp__agentic-rag__query_code("Agent class definition", frameworks=["openai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("Agent class definition", sdk="openai", mode="build")`
 
 ### Step 3: Tool Definition
-**RAG Query**: `mcp__agentic-rag__query_code("@tool decorator example", frameworks=["openai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("@tool decorator example", sdk="openai", mode="build")`
 
 Type hints + docstring = working tool.
 
 ### Step 4: Running the Agent
-**RAG Query**: `mcp__agentic-rag__query_code("Runner execution", frameworks=["openai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("Runner execution", sdk="openai", mode="build")`
 
 ### Step 5: Handoffs (if multi-agent)
-**RAG Query**: `mcp__agentic-rag__query_code("handoff between agents", frameworks=["openai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("handoff between agents", sdk="openai", mode="build")`
 
 ### Step 6: Memory (if conversational)
-**RAG Query**: `mcp__agentic-rag__query_code("agent memory persistence", frameworks=["openai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("agent memory persistence", sdk="openai", mode="build")`
 
 ## Common Error Patterns
 

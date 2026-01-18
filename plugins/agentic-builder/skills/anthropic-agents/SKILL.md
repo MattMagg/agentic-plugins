@@ -24,7 +24,7 @@ description: Workflow patterns and gotchas for Anthropic/Claude agents. Directs 
 | Deep reasoning | Extended thinking | `"claude extended thinking"` |
 | Conversation | Message history | `"claude conversation history"` |
 
-**Query RAG**: `mcp__agentic-rag__query_code("pattern example", frameworks=["anthropic"])`
+**Query RAG**: `mcp__agentic-rag__query_sdk("pattern example", sdk="anthropic", mode="build")`
 
 ## Critical Gotchas
 
@@ -41,23 +41,23 @@ These are Claude-specific traps:
 ## Workflow: Building a Claude Agent
 
 ### Step 1: SDK Setup
-**RAG Query**: `mcp__agentic-rag__query_docs("anthropic python sdk install", frameworks=["anthropic"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("anthropic python sdk install", sdk="anthropic", mode="explain")`
 
 ### Step 2: Tool Schema Definition
-**RAG Query**: `mcp__agentic-rag__query_code("tool input_schema definition", frameworks=["anthropic"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("tool input_schema definition", sdk="anthropic", mode="build")`
 
 Tools need `name`, `description`, `input_schema` (JSON Schema format).
 
 ### Step 3: Message Construction
-**RAG Query**: `mcp__agentic-rag__query_code("messages create tool_choice", frameworks=["anthropic"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("messages create tool_choice", sdk="anthropic", mode="build")`
 
 ### Step 4: Tool Response Handling
-**RAG Query**: `mcp__agentic-rag__query_code("tool_result content block", frameworks=["anthropic"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("tool_result content block", sdk="anthropic", mode="build")`
 
 Match `tool_use_id` exactly in your response.
 
 ### Step 5: Agentic Loop
-**RAG Query**: `mcp__agentic-rag__query_code("agentic loop stop_reason", frameworks=["anthropic"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("agentic loop stop_reason", sdk="anthropic", mode="build")`
 
 Loop until `stop_reason` is not `tool_use`.
 
@@ -74,7 +74,7 @@ Loop until `stop_reason` is not `tool_use`.
 ## Computer Use
 
 Special capability for GUI automation:
-**RAG Query**: `mcp__agentic-rag__query_docs("claude computer use setup", frameworks=["anthropic"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("claude computer use setup", sdk="anthropic", mode="explain")`
 
 Requirements:
 - Beta header required
@@ -84,7 +84,7 @@ Requirements:
 ## Extended Thinking
 
 For complex reasoning tasks:
-**RAG Query**: `mcp__agentic-rag__query_docs("claude extended thinking", frameworks=["anthropic"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("claude extended thinking", sdk="anthropic", mode="explain")`
 
 ## Advanced Features
 

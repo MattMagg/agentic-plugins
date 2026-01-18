@@ -234,7 +234,7 @@ After subagent returns:
 
 - `mcp__agentic-rag__query_docs(query, frameworks, top_k)` - Search documentation
 - `mcp__agentic-rag__query_code(query, frameworks, top_k)` - Search code examples
-- `mcp__agentic-rag__search_patterns(pattern_type, framework, top_k)` - Find patterns
+- `mcp__agentic-rag__search(pattern_type, framework, top_k, mode="build")` - Find patterns
 - `mcp__agentic-rag__list_frameworks()` - List available frameworks
 
 ## Available Skills

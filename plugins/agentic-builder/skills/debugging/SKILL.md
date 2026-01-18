@@ -21,7 +21,7 @@ description: Systematic debugging workflow for all agentic frameworks. Directs t
 
 ### Step 1: Reproduce
 Enable verbose/trace mode for the framework.
-**RAG Query**: `mcp__agentic-rag__query_docs("[framework] debugging tracing", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("[framework] debugging tracing", mode="explain")`
 
 ### Step 2: Isolate
 - Comment out components one by one
@@ -33,7 +33,7 @@ Enable verbose/trace mode for the framework.
 Match symptoms to category above. This determines the fix strategy.
 
 ### Step 4: Diagnose
-**RAG Query**: `mcp__agentic-rag__query_docs("error: [error message]", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("error: [error message]", mode="explain")`
 
 Check framework-specific gotchas in the relevant @framework skill.
 
@@ -49,7 +49,7 @@ Check framework-specific gotchas in the relevant @framework skill.
 2. Is package installed? (`pip list | grep [package]`)
 3. Is import path correct for version?
 
-**RAG Query**: `mcp__agentic-rag__query_docs("[framework] installation imports", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("[framework] installation imports", mode="explain")`
 
 ### Tool Not Working
 1. Does tool have a docstring? (Most frameworks require it)
@@ -57,7 +57,7 @@ Check framework-specific gotchas in the relevant @framework skill.
 3. Is tool registered with agent?
 4. Do parameter types match docstring?
 
-**RAG Query**: `mcp__agentic-rag__query_code("tool definition", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("tool definition", mode="build")`
 
 ### Auth Failures
 1. Does .env file exist and load?
@@ -65,14 +65,14 @@ Check framework-specific gotchas in the relevant @framework skill.
 3. Is env var name correct for framework?
 4. Is key valid and not expired?
 
-**RAG Query**: `mcp__agentic-rag__query_docs("[framework] authentication", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("[framework] authentication", mode="explain")`
 
 ### Wrong Routing (Multi-Agent)
 1. Are agent descriptions specific enough?
 2. Is routing logic correct?
 3. Are all agents registered?
 
-**RAG Query**: `mcp__agentic-rag__query_code("agent routing delegation", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("agent routing delegation", mode="build")`
 
 ## Framework Debug Commands
 

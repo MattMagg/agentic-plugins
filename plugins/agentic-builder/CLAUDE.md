@@ -21,11 +21,32 @@ Framework-agnostic agentic system builder with RAG-grounded knowledge. Supports:
 
 ## MCP Tools
 
-The plugin provides RAG query tools via MCP:
-- `mcp__agentic-rag__query_docs` - Search documentation
-- `mcp__agentic-rag__query_code` - Search code examples
-- `mcp__agentic-rag__search_patterns` - Find implementation patterns
-- `mcp__agentic-rag__list_frameworks` - List available frameworks
+The plugin provides RAG query tools via MCP (based on `/Users/mac-main/rag_qdrant_voyage`):
+
+### search (full-featured)
+```
+mcp__agentic-rag__search(
+    query,
+    sdk="adk|openai|langchain|langgraph|anthropic|crewai|general",
+    kind="doc|code",
+    mode="build|debug|explain|refactor",
+    top_k=12,
+    multi_query=False,
+    expand_context=True
+)
+```
+
+### query_sdk (simplified)
+```
+mcp__agentic-rag__query_sdk(query, sdk="adk", mode="build")
+```
+
+### list_frameworks
+```
+mcp__agentic-rag__list_frameworks()
+```
+
+**Modes**: build (code), debug (errors), explain (docs), refactor (patterns)
 
 ## Skills
 

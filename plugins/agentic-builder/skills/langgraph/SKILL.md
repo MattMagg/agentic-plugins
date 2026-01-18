@@ -25,7 +25,7 @@ description: Workflow patterns and gotchas for LangGraph. Directs to RAG for imp
 | Human approval | Checkpoints | `"human in loop checkpoint"` |
 | Agent with tools | ReAct pattern | `"react agent langgraph"` |
 
-**Query RAG**: `mcp__agentic-rag__query_code("pattern example", frameworks=["langgraph"])`
+**Query RAG**: `mcp__agentic-rag__query_sdk("pattern example", sdk="langgraph", mode="build")`
 
 ## Critical Gotchas
 
@@ -43,26 +43,26 @@ These cause debugging nightmares:
 ## Workflow: Building a LangGraph Agent
 
 ### Step 1: State Definition
-**RAG Query**: `mcp__agentic-rag__query_code("TypedDict state definition", frameworks=["langgraph"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("TypedDict state definition", sdk="langgraph", mode="build")`
 
 Define your state schema with TypedDict and Annotated for reducers.
 
 ### Step 2: Node Functions
-**RAG Query**: `mcp__agentic-rag__query_code("graph node function", frameworks=["langgraph"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("graph node function", sdk="langgraph", mode="build")`
 
 Each node takes state, returns partial state update.
 
 ### Step 3: Graph Construction
-**RAG Query**: `mcp__agentic-rag__query_code("StateGraph add_node add_edge", frameworks=["langgraph"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("StateGraph add_node add_edge", sdk="langgraph", mode="build")`
 
 ### Step 4: Edge Definition
-**RAG Query**: `mcp__agentic-rag__query_code("conditional_edges routing", frameworks=["langgraph"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("conditional_edges routing", sdk="langgraph", mode="build")`
 
 ### Step 5: Compilation
-**RAG Query**: `mcp__agentic-rag__query_code("graph compile checkpointer", frameworks=["langgraph"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("graph compile checkpointer", sdk="langgraph", mode="build")`
 
 ### Step 6: Execution
-**RAG Query**: `mcp__agentic-rag__query_code("compiled graph invoke stream", frameworks=["langgraph"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("compiled graph invoke stream", sdk="langgraph", mode="build")`
 
 ## Common Error Patterns
 
@@ -79,15 +79,15 @@ Each node takes state, returns partial state update.
 
 ### Decision Tree
 Nodes for each decision point, conditional edges for branching.
-**RAG Query**: `mcp__agentic-rag__query_code("decision tree graph", frameworks=["langgraph"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("decision tree graph", sdk="langgraph", mode="build")`
 
 ### ReAct Agent
 Reason-Act-Observe loop with tool calling.
-**RAG Query**: `mcp__agentic-rag__query_code("react agent pattern", frameworks=["langgraph"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("react agent pattern", sdk="langgraph", mode="build")`
 
 ### Plan-and-Execute
 Planning node, execution loop, verification.
-**RAG Query**: `mcp__agentic-rag__query_code("plan execute pattern", frameworks=["langgraph"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("plan execute pattern", sdk="langgraph", mode="build")`
 
 ## Advanced Features
 

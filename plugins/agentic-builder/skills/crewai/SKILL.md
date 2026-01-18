@@ -24,7 +24,7 @@ description: Workflow patterns and gotchas for CrewAI. Directs to RAG for implem
 | Custom capabilities | Tool | `"crewai custom tool"` |
 | Structured output | Output schemas | `"crewai output pydantic"` |
 
-**Query RAG**: `mcp__agentic-rag__query_code("component example", frameworks=["crewai"])`
+**Query RAG**: `mcp__agentic-rag__query_sdk("component example", sdk="crewai", mode="build")`
 
 ## Critical Gotchas
 
@@ -41,23 +41,23 @@ These define CrewAI success:
 ## Workflow: Building a CrewAI System
 
 ### Step 1: Define Agents
-**RAG Query**: `mcp__agentic-rag__query_code("Agent role goal backstory", frameworks=["crewai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("Agent role goal backstory", sdk="crewai", mode="build")`
 
 Each agent needs a clear role, specific goal, and relevant backstory.
 
 ### Step 2: Create Tools
-**RAG Query**: `mcp__agentic-rag__query_code("crewai tool decorator", frameworks=["crewai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("crewai tool decorator", sdk="crewai", mode="build")`
 
 ### Step 3: Define Tasks
-**RAG Query**: `mcp__agentic-rag__query_code("Task description expected_output", frameworks=["crewai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("Task description expected_output", sdk="crewai", mode="build")`
 
 Tasks must specify: description, expected_output, assigned agent.
 
 ### Step 4: Assemble Crew
-**RAG Query**: `mcp__agentic-rag__query_code("Crew agents tasks process", frameworks=["crewai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("Crew agents tasks process", sdk="crewai", mode="build")`
 
 ### Step 5: Execute
-**RAG Query**: `mcp__agentic-rag__query_code("crew kickoff inputs", frameworks=["crewai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("crew kickoff inputs", sdk="crewai", mode="build")`
 
 ## Common Error Patterns
 
@@ -80,11 +80,11 @@ Tasks must specify: description, expected_output, assigned agent.
 
 ### Research Crew
 Researcher → Analyst → Writer pipeline.
-**RAG Query**: `mcp__agentic-rag__query_code("research crew example", frameworks=["crewai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("research crew example", sdk="crewai", mode="build")`
 
 ### Support Crew
 Triage → Specialist routing.
-**RAG Query**: `mcp__agentic-rag__query_code("support crew routing", frameworks=["crewai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("support crew routing", sdk="crewai", mode="build")`
 
 ## Advanced Features
 

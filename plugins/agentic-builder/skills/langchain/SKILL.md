@@ -25,7 +25,7 @@ description: Workflow patterns and gotchas for LangChain. Directs to RAG for imp
 | Document retrieval | Retriever | `"retriever vector store"` |
 | Conversation memory | Memory classes | `"conversation buffer memory"` |
 
-**Query RAG**: `mcp__agentic-rag__query_code("component example", frameworks=["langchain"])`
+**Query RAG**: `mcp__agentic-rag__query_sdk("component example", sdk="langchain", mode="build")`
 
 ## Critical Gotchas
 
@@ -42,22 +42,22 @@ These trip up everyone:
 ## Workflow: Building a LangChain Application
 
 ### Step 1: Dependencies
-**RAG Query**: `mcp__agentic-rag__query_docs("langchain installation packages", frameworks=["langchain"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("langchain installation packages", sdk="langchain", mode="explain")`
 
 ### Step 2: LLM Setup
-**RAG Query**: `mcp__agentic-rag__query_code("ChatOpenAI ChatAnthropic setup", frameworks=["langchain"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("ChatOpenAI ChatAnthropic setup", sdk="langchain", mode="build")`
 
 ### Step 3: Prompt Design
-**RAG Query**: `mcp__agentic-rag__query_code("ChatPromptTemplate messages", frameworks=["langchain"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("ChatPromptTemplate messages", sdk="langchain", mode="build")`
 
 ### Step 4: Chain Composition
-**RAG Query**: `mcp__agentic-rag__query_code("LCEL chain pipe operator", frameworks=["langchain"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("LCEL chain pipe operator", sdk="langchain", mode="build")`
 
 ### Step 5: Tool Integration (if needed)
-**RAG Query**: `mcp__agentic-rag__query_code("StructuredTool from_function", frameworks=["langchain"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("StructuredTool from_function", sdk="langchain", mode="build")`
 
 ### Step 6: Retrieval (if RAG)
-**RAG Query**: `mcp__agentic-rag__query_code("vector store retriever", frameworks=["langchain"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("vector store retriever", sdk="langchain", mode="build")`
 
 ## Common Error Patterns
 

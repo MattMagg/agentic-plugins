@@ -19,25 +19,25 @@ description: Workflow patterns for multi-agent systems across frameworks. Direct
 
 ### ADK Multi-Agent
 Uses `sub_agents` for delegation.
-**RAG Query**: `mcp__agentic-rag__query_code("sub_agents delegation", frameworks=["adk"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("sub_agents delegation", sdk="adk", mode="build")`
 
 Key: Agent `description` drives routing decisions.
 
 ### LangGraph Multi-Agent
 Uses graph nodes for each agent, conditional edges for routing.
-**RAG Query**: `mcp__agentic-rag__query_code("multi-agent graph", frameworks=["langgraph"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("multi-agent graph", sdk="langgraph", mode="build")`
 
 Key: State must flow between agent nodes.
 
 ### CrewAI Multi-Agent
 Uses Crew with agents and tasks.
-**RAG Query**: `mcp__agentic-rag__query_code("crew agents tasks", frameworks=["crewai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("crew agents tasks", sdk="crewai", mode="build")`
 
 Key: Process type (sequential vs hierarchical) changes everything.
 
 ### OpenAI Multi-Agent
 Uses handoffs between agents.
-**RAG Query**: `mcp__agentic-rag__query_code("agent handoff", frameworks=["openai"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("agent handoff", sdk="openai", mode="build")`
 
 Key: Handoff descriptions determine routing.
 
@@ -82,10 +82,10 @@ Each agent needs:
 Use table above to select pattern based on your workflow.
 
 ### Step 3: Design Routing Logic
-**RAG Query**: `mcp__agentic-rag__query_code("[routing strategy] [framework]", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("[routing strategy] [framework]", mode="build")`
 
 ### Step 4: Implement State Sharing
-**RAG Query**: `mcp__agentic-rag__query_code("state sharing [framework]", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("state sharing [framework]", mode="build")`
 
 ### Step 5: Add Termination Conditions
 - Max iterations

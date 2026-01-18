@@ -51,17 +51,17 @@ Based on category:
 
 ```python
 # For import errors
-mcp__agentic-rag__query_docs("import error [package]", frameworks=[detected])
+mcp__agentic-rag__search("import error [package]", mode="explain")
 
 # For tool errors
-mcp__agentic-rag__query_docs("tool definition requirements", frameworks=[detected])
-mcp__agentic-rag__search_patterns("tool_definition", "[framework]")
+mcp__agentic-rag__search("tool definition requirements", mode="explain")
+mcp__agentic-rag__query_sdk("tool_definition", sdk="[framework]", mode="build")
 
 # For auth errors
-mcp__agentic-rag__query_docs("authentication setup", frameworks=[detected])
+mcp__agentic-rag__search("authentication setup", mode="explain")
 
 # For runtime errors
-mcp__agentic-rag__query_code("[specific error pattern]", frameworks=[detected])
+mcp__agentic-rag__search("[specific error pattern]", mode="build")
 ```
 
 ### Step 5: Framework-Specific Debugging
@@ -165,7 +165,7 @@ To avoid this issue in the future:
 ## Additional Resources
 
 RAG queries for more context:
-- `mcp__agentic-rag__query_docs("[topic]", frameworks=["[fw]"])`
+- `mcp__agentic-rag__query_sdk("[topic]", sdk="[fw]", mode="explain")`
 ```
 
 ---
@@ -234,7 +234,7 @@ for k in keys:
 
 - `mcp__agentic-rag__query_docs(query, frameworks, top_k)`
 - `mcp__agentic-rag__query_code(query, frameworks, top_k)`
-- `mcp__agentic-rag__search_patterns(pattern_type, framework, top_k)`
+- `mcp__agentic-rag__search(pattern_type, framework, top_k, mode="build")`
 
 ## Skills to Reference
 

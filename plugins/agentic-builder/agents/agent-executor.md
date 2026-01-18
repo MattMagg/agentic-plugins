@@ -238,7 +238,7 @@ Append to `agentic-builder/[feature]/session.md`:
 ## Available Tools
 
 - `mcp__agentic-rag__query_code(query, frameworks, top_k)`
-- `mcp__agentic-rag__search_patterns(pattern_type, framework, top_k)`
+- `mcp__agentic-rag__search(pattern_type, framework, top_k, mode="build")`
 
 ## Skills to Reference
 

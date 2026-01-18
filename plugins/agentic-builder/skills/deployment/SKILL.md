@@ -48,7 +48,7 @@ description: Production deployment workflow for agentic systems. Directs to RAG 
 ## Deployment Workflow
 
 ### Step 1: Environment Configuration
-**RAG Query**: `mcp__agentic-rag__query_docs("[framework] environment configuration", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("[framework] environment configuration", mode="explain")`
 
 Production differs from development:
 - LOG_LEVEL: INFO (not DEBUG)
@@ -56,13 +56,13 @@ Production differs from development:
 - Secrets: Use secret manager, not .env
 
 ### Step 2: Containerization (if applicable)
-**RAG Query**: `mcp__agentic-rag__query_code("[framework] dockerfile", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("[framework] dockerfile", mode="build")`
 
 ### Step 3: Platform Deployment
-**RAG Query**: `mcp__agentic-rag__query_docs("[framework] [platform] deployment", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("[framework] [platform] deployment", mode="explain")`
 
 ### Step 4: Monitoring Setup
-**RAG Query**: `mcp__agentic-rag__query_docs("[framework] monitoring observability", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("[framework] monitoring observability", mode="explain")`
 
 ## Key Production Metrics
 
@@ -81,21 +81,21 @@ Production differs from development:
 - Limit input length
 - Filter known attack patterns
 
-**RAG Query**: `mcp__agentic-rag__query_docs("agent input validation security", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("agent input validation security", mode="explain")`
 
 ### Output Guardrails
 - Filter sensitive information
 - Prevent prompt leakage
 - Validate tool outputs
 
-**RAG Query**: `mcp__agentic-rag__query_docs("agent guardrails output filtering", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("agent guardrails output filtering", mode="explain")`
 
 ### Secret Management
 - Never hardcode API keys
 - Use platform secret managers (GCP Secret Manager, AWS Secrets Manager, etc.)
 - Rotate keys regularly
 
-**RAG Query**: `mcp__agentic-rag__query_docs("[framework] secret management", frameworks=[detected])`
+**RAG Query**: `mcp__agentic-rag__search("[framework] secret management", mode="explain")`
 
 ## Scaling Considerations
 

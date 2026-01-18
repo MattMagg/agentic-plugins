@@ -24,7 +24,7 @@ description: Workflow patterns and gotchas for Google Agent Development Kit. Dir
 | Parallel execution | `ParallelAgent` | `"ParallelAgent concurrent"` |
 | Iteration patterns | `LoopAgent` | `"LoopAgent termination"` |
 
-**Query RAG**: `mcp__agentic-rag__query_code("agent type example", frameworks=["adk"])`
+**Query RAG**: `mcp__agentic-rag__query_sdk("agent type example", sdk="adk", mode="build")`
 
 ## Critical Gotchas
 
@@ -39,24 +39,24 @@ These are NOT in docs or easy to discover:
 ## Workflow: Creating an ADK Agent
 
 ### Step 1: Project Setup
-**RAG Query**: `mcp__agentic-rag__query_docs("ADK project structure", frameworks=["adk"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("ADK project structure", sdk="adk", mode="explain")`
 
 ### Step 2: Agent Definition
-**RAG Query**: `mcp__agentic-rag__query_code("LlmAgent basic example", frameworks=["adk"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("LlmAgent basic example", sdk="adk", mode="build")`
 
 ### Step 3: Tool Creation
-**RAG Query**: `mcp__agentic-rag__query_code("function tool definition", frameworks=["adk"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("function tool definition", sdk="adk", mode="build")`
 
 Remember: Every tool needs a docstring with Args and Returns.
 
 ### Step 4: State Management (if needed)
-**RAG Query**: `mcp__agentic-rag__query_code("agent state management", frameworks=["adk"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("agent state management", sdk="adk", mode="build")`
 
 ### Step 5: Multi-Agent (if needed)
-**RAG Query**: `mcp__agentic-rag__query_code("sub_agents routing", frameworks=["adk"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("sub_agents routing", sdk="adk", mode="build")`
 
 ### Step 6: Testing
-**RAG Query**: `mcp__agentic-rag__query_docs("ADK testing", frameworks=["adk"])`
+**RAG Query**: `mcp__agentic-rag__query_sdk("ADK testing", sdk="adk", mode="explain")`
 
 ## Common Error Patterns
 
