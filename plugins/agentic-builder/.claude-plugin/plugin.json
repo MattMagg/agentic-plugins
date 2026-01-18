@@ -1,0 +1,12 @@
+{
+  "name": "agentic-builder",
+  "version": "1.0.0",
+  "description": "Framework-agnostic agentic system builder with RAG-grounded knowledge across ADK, OpenAI, LangChain, LangGraph, Anthropic, and CrewAI",
+  "author": {
+    "name": "Agentic Builder Contributors"
+  },
+  "keywords": ["agents", "adk", "openai", "langchain", "langgraph", "crewai", "anthropic", "rag", "multi-agent"],
+  "license": "MIT",
+  "commands": "./commands",
+  "hooks": "./hooks/hooks.json"
+}

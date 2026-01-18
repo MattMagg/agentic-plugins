@@ -12,6 +12,12 @@
       "description": "Autonomous Google ADK development with spec-driven workflows",
       "source": "./plugins/adk-builder",
       "category": "development"
+    },
+    {
+      "name": "agentic-builder",
+      "description": "Framework-agnostic agentic system builder with RAG-grounded knowledge across ADK, OpenAI, LangChain, LangGraph, Anthropic, and CrewAI",
+      "source": "./plugins/agentic-builder",
+      "category": "development"
     }
   ]
 }
