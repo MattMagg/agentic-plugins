@@ -68,3 +68,7 @@ logs/
 # Firebase
 firebase-debug.log
 .firebase/
+
+# Agent instruction files (ignore all except root)
+**/CLAUDE.md
+!/CLAUDE.md
