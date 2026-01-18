@@ -1,95 +1,79 @@
 ---
 name: OpenAI Agents
-description: Patterns, idioms, and gotchas for OpenAI Agents SDK. Use when building OpenAI agents.
+description: Workflow patterns and gotchas for OpenAI Agents SDK. Directs to RAG for implementation.
 ---
 
-# OpenAI Agents Patterns
+# OpenAI Agents Workflow
 
-## Key Idioms
+## When to Choose OpenAI Agents
 
-### Agent Creation
-```python
-from agents import Agent, tool
+- Already using OpenAI API and models
+- Need handoff patterns between specialized agents
+- Want function calling with type safety
+- Building conversational assistants
 
-agent = Agent(
-    name="my_agent",
-    model="gpt-4",
-    instructions="You are a helpful assistant.",
-    tools=[my_tool]
-)
-```
+## Decision Framework
 
-### Tool Definitions
+### Architecture Patterns
 
-Use the `@tool` decorator:
+| Need | Pattern | RAG Query |
+|------|---------|-----------|
+| Single specialist | Basic Agent | `"Agent basic example"` |
+| Route to specialists | Handoffs | `"agent handoff routing"` |
+| Sequential steps | Agent chains | `"agent chain pattern"` |
+| Persistent context | Memory | `"agent memory conversation"` |
+| Background processing | Async runner | `"async agent runner"` |
 
-```python
-from agents import tool
+**Query RAG**: `mcp__agentic-rag__query_code("pattern name", frameworks=["openai"])`
 
-@tool
-def search_web(query: str) -> str:
-    """Search the web for information.
+## Critical Gotchas
 
-    Args:
-        query: The search query
+These cause silent failures or confusion:
 
-    Returns:
-        Search results as text
-    """
-    return f"Results for: {query}"
-```
+1. **Use `@tool` decorator** - Functions without it won't be recognized
+2. **Type hints are required** - Parameters need type annotations for schema generation
+3. **Docstrings define the schema** - LLM uses docstring for understanding, not just comments
+4. **OPENAI_API_KEY env var** - Must be set; SDK doesn't prompt for it
+5. **Model names are specific** - `gpt-4`, `gpt-4-turbo`, `gpt-4o` (not `gpt4` or `GPT-4`)
+6. **Handoff descriptions drive routing** - Vague = poor decisions
 
-### Running Agents
+## Workflow: Creating an OpenAI Agent
 
-```python
-from agents import Runner
+### Step 1: Environment Setup
+**RAG Query**: `mcp__agentic-rag__query_docs("openai agents installation", frameworks=["openai"])`
 
-runner = Runner()
-result = runner.run(agent, "Hello, how are you?")
-print(result.final_output)
-```
+### Step 2: Basic Agent
+**RAG Query**: `mcp__agentic-rag__query_code("Agent class definition", frameworks=["openai"])`
 
-## Common Gotchas
+### Step 3: Tool Definition
+**RAG Query**: `mcp__agentic-rag__query_code("@tool decorator example", frameworks=["openai"])`
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Tool not found | Missing `@tool` decorator | Add decorator |
-| API error | Wrong key | Check `OPENAI_API_KEY` |
-| Model error | Invalid name | Use `gpt-4`, `gpt-4-turbo`, `gpt-3.5-turbo` |
-| Import error | Wrong package | `pip install openai-agents` |
+Type hints + docstring = working tool.
 
-## Quick Patterns
+### Step 4: Running the Agent
+**RAG Query**: `mcp__agentic-rag__query_code("Runner execution", frameworks=["openai"])`
 
-### With Handoffs
-```python
-from agents import Agent, handoff
+### Step 5: Handoffs (if multi-agent)
+**RAG Query**: `mcp__agentic-rag__query_code("handoff between agents", frameworks=["openai"])`
 
-support_agent = Agent(name="support", ...)
-sales_agent = Agent(name="sales", ...)
+### Step 6: Memory (if conversational)
+**RAG Query**: `mcp__agentic-rag__query_code("agent memory persistence", frameworks=["openai"])`
 
-triage_agent = Agent(
-    name="triage",
-    handoffs=[
-        handoff(support_agent, "Route support questions here"),
-        handoff(sales_agent, "Route sales inquiries here")
-    ]
-)
-```
+## Common Error Patterns
 
-### With Memory
-```python
-from agents import Agent
-from agents.memory import Memory
+| Symptom | Likely Cause | RAG Query |
+|---------|--------------|-----------|
+| Tool not found | Missing @tool decorator | `"tool decorator usage"` |
+| Schema error | Missing type hints | `"tool type annotations"` |
+| API error | Invalid API key | `"openai authentication"` |
+| Model error | Wrong model name | `"supported models"` |
+| Handoff fails | Bad description | `"handoff description"` |
 
-agent = Agent(
-    name="memory_agent",
-    memory=Memory()
-)
-```
+## Advanced Features
 
-## When to Use RAG
-
-```python
-mcp__agentic-rag__query_docs("topic", frameworks=["openai"])
-mcp__agentic-rag__query_code("pattern", frameworks=["openai"])
-```
+Query RAG when you need:
+- Streaming responses: `"streaming agent output"`
+- Parallel tool calls: `"parallel tool execution"`
+- Custom runners: `"custom Runner implementation"`
+- Guardrails: `"agent guardrails safety"`
+- Tracing: `"agent tracing debugging"`

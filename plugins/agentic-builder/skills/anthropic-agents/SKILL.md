@@ -1,91 +1,96 @@
 ---
 name: Anthropic Agents
-description: Patterns, idioms, and gotchas for Anthropic/Claude Agent SDK. Use when building Claude-native agents.
+description: Workflow patterns and gotchas for Anthropic/Claude agents. Directs to RAG for implementation.
 ---
 
-# Anthropic Agents Patterns
+# Anthropic Agents Workflow
 
-## Key Idioms
+## When to Choose Anthropic/Claude
 
-### Tool Definitions
-```python
-import anthropic
+- Building with Claude models
+- Need computer use capabilities
+- Want extended thinking (deep reasoning)
+- Require strong safety/alignment features
 
-tools = [
-    {
-        "name": "search",
-        "description": "Search for information",
-        "input_schema": {
-            "type": "object",
-            "properties": {
-                "query": {"type": "string", "description": "Search query"}
-            },
-            "required": ["query"]
-        }
-    }
-]
-```
+## Decision Framework
 
-### Using Tools with Claude
-```python
-client = anthropic.Anthropic()
+### Pattern Selection
 
-response = client.messages.create(
-    model="claude-sonnet-4-20250514",
-    max_tokens=1024,
-    tools=tools,
-    messages=[{"role": "user", "content": "Search for Python tutorials"}]
-)
-```
+| Need | Pattern | RAG Query |
+|------|---------|-----------|
+| Basic tool use | Tool definitions | `"claude tool definition"` |
+| Agentic loop | Iterative tool calling | `"claude agentic loop"` |
+| Computer control | Computer use | `"claude computer use"` |
+| Deep reasoning | Extended thinking | `"claude extended thinking"` |
+| Conversation | Message history | `"claude conversation history"` |
 
-### Handling Tool Use
-```python
-for block in response.content:
-    if block.type == "tool_use":
-        tool_name = block.name
-        tool_input = block.input
-        # Execute tool and continue conversation
-```
+**Query RAG**: `mcp__agentic-rag__query_code("pattern example", frameworks=["anthropic"])`
 
-## Common Gotchas
+## Critical Gotchas
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Tool not called | Bad description | Make description clear and specific |
-| Schema error | Invalid JSON schema | Validate input_schema format |
-| Rate limit | Too many requests | Add retry with backoff |
-| Model error | Wrong name | Use `claude-sonnet-4-20250514`, `claude-opus-4-20250514` |
+These are Claude-specific traps:
 
-## Quick Patterns
+1. **Tool schemas are strict** - JSON schema format, not Python type hints
+2. **`tool_use` vs `tool_result`** - Tool calls are `tool_use`, responses are `tool_result`
+3. **Tool IDs must match** - Response must include the exact `tool_use_id`
+4. **ANTHROPIC_API_KEY** - Environment variable name is specific
+5. **Max tokens required** - Must specify `max_tokens` in API calls
+6. **Stop reason matters** - Check `stop_reason` to know if done or needs tool response
+7. **Computer use needs beta header** - Requires `anthropic-beta` header
 
-### Agentic Loop
-```python
-while True:
-    response = client.messages.create(...)
+## Workflow: Building a Claude Agent
 
-    if response.stop_reason == "end_turn":
-        break
+### Step 1: SDK Setup
+**RAG Query**: `mcp__agentic-rag__query_docs("anthropic python sdk install", frameworks=["anthropic"])`
 
-    for block in response.content:
-        if block.type == "tool_use":
-            result = execute_tool(block.name, block.input)
-            messages.append({"role": "user", "content": [
-                {"type": "tool_result", "tool_use_id": block.id, "content": result}
-            ]})
-```
+### Step 2: Tool Schema Definition
+**RAG Query**: `mcp__agentic-rag__query_code("tool input_schema definition", frameworks=["anthropic"])`
 
-### With Computer Use
-```python
-tools = [
-    {"type": "computer_20241022", "name": "computer", "display_width_px": 1024, "display_height_px": 768},
-    {"type": "text_editor_20241022", "name": "str_replace_editor"},
-    {"type": "bash_20241022", "name": "bash"}
-]
-```
+Tools need `name`, `description`, `input_schema` (JSON Schema format).
 
-## When to Use RAG
+### Step 3: Message Construction
+**RAG Query**: `mcp__agentic-rag__query_code("messages create tool_choice", frameworks=["anthropic"])`
 
-```python
-mcp__agentic-rag__query_docs("topic", frameworks=["anthropic"])
-mcp__agentic-rag__query_code("pattern", frameworks=["anthropic"])
-```
+### Step 4: Tool Response Handling
+**RAG Query**: `mcp__agentic-rag__query_code("tool_result content block", frameworks=["anthropic"])`
+
+Match `tool_use_id` exactly in your response.
+
+### Step 5: Agentic Loop
+**RAG Query**: `mcp__agentic-rag__query_code("agentic loop stop_reason", frameworks=["anthropic"])`
+
+Loop until `stop_reason` is not `tool_use`.
+
+## Common Error Patterns
+
+| Symptom | Likely Cause | RAG Query |
+|---------|--------------|-----------|
+| Tool not called | Bad schema | `"tool input_schema"` |
+| Tool response ignored | Wrong tool_use_id | `"tool_result matching"` |
+| Loop never ends | Not checking stop_reason | `"stop_reason end_turn"` |
+| Rate limit | Too many requests | `"anthropic rate limits"` |
+| Schema validation error | Wrong JSON schema format | `"json schema tool"` |
+
+## Computer Use
+
+Special capability for GUI automation:
+**RAG Query**: `mcp__agentic-rag__query_docs("claude computer use setup", frameworks=["anthropic"])`
+
+Requirements:
+- Beta header required
+- Screenshot handling needed
+- Coordinate system understanding
+
+## Extended Thinking
+
+For complex reasoning tasks:
+**RAG Query**: `mcp__agentic-rag__query_docs("claude extended thinking", frameworks=["anthropic"])`
+
+## Advanced Features
+
+Query RAG when you need:
+- Streaming: `"claude streaming response"`
+- Vision: `"claude image input"`
+- PDF processing: `"claude pdf document"`
+- Caching: `"claude prompt caching"`
+- Batching: `"anthropic batch api"`

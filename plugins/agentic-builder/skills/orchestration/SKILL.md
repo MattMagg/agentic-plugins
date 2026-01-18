@@ -1,131 +1,117 @@
 ---
 name: Multi-Agent Orchestration
-description: Patterns for multi-agent systems across frameworks. Use when building agent teams or orchestration.
+description: Workflow patterns for multi-agent systems across frameworks. Directs to RAG for implementation.
 ---
 
-# Multi-Agent Orchestration Patterns
+# Multi-Agent Orchestration Workflow
 
-## Orchestration Patterns
+## Pattern Selection
 
-| Pattern | Description | Best For |
-|---------|-------------|----------|
-| **Delegation** | Main agent routes to specialists | Task-based routing |
-| **Sequential** | Agents execute in order | Pipelines |
-| **Parallel** | Agents execute concurrently | Independent tasks |
-| **Hierarchical** | Manager oversees workers | Complex workflows |
-| **Mesh** | Agents communicate peer-to-peer | Collaborative tasks |
+| Pattern | When to Use | Complexity | RAG Query |
+|---------|-------------|------------|-----------|
+| **Delegation** | Route to specialists by task type | Low | `"agent delegation routing"` |
+| **Sequential** | Pipeline with handoffs | Low | `"sequential agent pipeline"` |
+| **Parallel** | Independent concurrent tasks | Medium | `"parallel agent execution"` |
+| **Hierarchical** | Manager coordinates workers | Medium | `"hierarchical agent manager"` |
+| **Mesh** | Peer-to-peer collaboration | High | `"agent mesh communication"` |
 
-## Framework Implementations
+## Framework-Specific Patterns
 
-### ADK Delegation
-```python
-root_agent = LlmAgent(
-    name="coordinator",
-    instruction="Route to specialists.",
-    sub_agents=[
-        researcher,  # Handles research queries
-        writer,      # Handles writing tasks
-        coder        # Handles coding tasks
-    ]
-)
-```
+### ADK Multi-Agent
+Uses `sub_agents` for delegation.
+**RAG Query**: `mcp__agentic-rag__query_code("sub_agents delegation", frameworks=["adk"])`
+
+Key: Agent `description` drives routing decisions.
 
 ### LangGraph Multi-Agent
-```python
-from langgraph.graph import StateGraph
+Uses graph nodes for each agent, conditional edges for routing.
+**RAG Query**: `mcp__agentic-rag__query_code("multi-agent graph", frameworks=["langgraph"])`
 
-graph = StateGraph(State)
-graph.add_node("router", router_node)
-graph.add_node("researcher", researcher_node)
-graph.add_node("writer", writer_node)
+Key: State must flow between agent nodes.
 
-graph.add_conditional_edges("router", route_to_agent)
-```
+### CrewAI Multi-Agent
+Uses Crew with agents and tasks.
+**RAG Query**: `mcp__agentic-rag__query_code("crew agents tasks", frameworks=["crewai"])`
 
-### CrewAI Crew
-```python
-crew = Crew(
-    agents=[researcher, writer, editor],
-    tasks=[research_task, writing_task, editing_task],
-    process=Process.sequential
-)
-```
+Key: Process type (sequential vs hierarchical) changes everything.
 
-### OpenAI Handoffs
-```python
-triage = Agent(
-    name="triage",
-    handoffs=[
-        handoff(support, "For support questions"),
-        handoff(sales, "For sales inquiries")
-    ]
-)
-```
+### OpenAI Multi-Agent
+Uses handoffs between agents.
+**RAG Query**: `mcp__agentic-rag__query_code("agent handoff", frameworks=["openai"])`
 
-## Routing Strategies
+Key: Handoff descriptions determine routing.
 
-### Keyword-Based
-```python
-def route(query: str) -> str:
-    if "code" in query.lower():
-        return "coder"
-    elif "research" in query.lower():
-        return "researcher"
-    return "default"
-```
+## Routing Strategy Decision
 
-### LLM-Based
-```python
-def route(query: str) -> str:
-    response = llm.invoke(f"Classify: {query}")
-    return response.content  # "coder" | "researcher" | ...
-```
+| Strategy | Best For | Tradeoff | RAG Query |
+|----------|----------|----------|-----------|
+| **Keyword** | Simple, predictable tasks | Brittle | `"keyword routing"` |
+| **LLM-based** | Complex, nuanced routing | Slower, costlier | `"llm routing classification"` |
+| **Semantic** | Similar intent detection | Needs embeddings | `"semantic routing embedding"` |
+| **Rule-based** | Deterministic, auditable | Manual maintenance | `"rule based routing"` |
 
-### Semantic Similarity
-```python
-def route(query: str) -> str:
-    query_embedding = embed(query)
-    # Compare to agent description embeddings
-    return most_similar_agent
-```
+## Critical Gotchas
 
-## Common Gotchas
+These cause multi-agent failures:
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Wrong routing | Vague descriptions | Make agent descriptions specific |
-| Infinite loops | Circular delegation | Add loop detection |
-| Lost context | No state passing | Pass state between agents |
-| Slow response | Sequential when could parallel | Use parallel where possible |
+1. **Vague descriptions** - Agents won't be routed correctly if descriptions are generic
+2. **Missing state passing** - Context lost between agents
+3. **Circular delegation** - Agent A → B → A infinite loop
+4. **No termination condition** - Loops forever
+5. **Sequential when could parallel** - Unnecessary latency
+6. **No error handling** - One agent failure crashes system
 
 ## State Sharing Patterns
 
-### Shared Memory
-```python
-# All agents read/write to shared state
-state = {"context": "", "results": []}
-```
+| Pattern | When to Use | RAG Query |
+|---------|-------------|-----------|
+| Shared dict/TypedDict | Simple, synchronous | `"shared state dict"` |
+| Message history | Conversational | `"message passing agents"` |
+| External store | Persistence needed | `"agent state persistence"` |
+| Event bus | Decoupled agents | `"event driven agents"` |
 
-### Message Passing
-```python
-# Agents communicate via messages
-messages = [
-    {"from": "researcher", "content": "..."},
-    {"from": "writer", "content": "..."}
-]
-```
+## Workflow: Building Multi-Agent System
 
-### Event-Based
-```python
-# Agents emit/listen to events
-events.emit("research_complete", data)
-events.on("research_complete", writer.process)
-```
+### Step 1: Define Agent Responsibilities
+Each agent needs:
+- Clear, specific role
+- Well-defined capabilities
+- Distinct from other agents
 
-## When to Use RAG
+### Step 2: Choose Orchestration Pattern
+Use table above to select pattern based on your workflow.
 
-```python
-mcp__agentic-rag__query_docs("multi-agent", frameworks=[fw])
-mcp__agentic-rag__search_patterns("delegation", fw)
-mcp__agentic-rag__search_patterns("orchestration", fw)
-```
+### Step 3: Design Routing Logic
+**RAG Query**: `mcp__agentic-rag__query_code("[routing strategy] [framework]", frameworks=[detected])`
+
+### Step 4: Implement State Sharing
+**RAG Query**: `mcp__agentic-rag__query_code("state sharing [framework]", frameworks=[detected])`
+
+### Step 5: Add Termination Conditions
+- Max iterations
+- Goal achievement check
+- Timeout
+
+### Step 6: Error Handling
+- Fallback agents
+- Retry logic
+- Graceful degradation
+
+## Common Error Patterns
+
+| Symptom | Likely Cause | Fix |
+|---------|--------------|-----|
+| Wrong agent called | Vague description | Make descriptions specific |
+| Infinite loop | No termination | Add max iterations, goal check |
+| Context lost | No state passing | Implement state sharing |
+| Slow response | Sequential unnecessary | Use parallel where possible |
+| One failure crashes all | No error handling | Add try/catch, fallbacks |
+
+## Performance Optimization
+
+| Issue | Solution | RAG Query |
+|-------|----------|-----------|
+| Latency | Parallel where possible | `"parallel agent optimization"` |
+| Token usage | Shorter agent contexts | `"agent context optimization"` |
+| Routing errors | Better descriptions | `"agent description best practices"` |
+| State bloat | Prune old messages | `"state management cleanup"` |

@@ -1,107 +1,78 @@
 ---
 name: Google ADK
-description: Patterns, idioms, and gotchas for Google Agent Development Kit. Use when building ADK agents.
+description: Workflow patterns and gotchas for Google Agent Development Kit. Directs to RAG for implementation.
 ---
 
-# Google ADK Patterns
+# Google ADK Workflow
 
-## Key Idioms
+## When to Choose ADK
 
-### Agent Naming
-- Export as `root_agent` in `agent.py` - this is the convention ADK expects
-- Use descriptive `name` for logging and debugging
+- Building for Google Cloud / Vertex AI deployment
+- Need streaming-first architecture
+- Want agent-to-agent (A2A) protocol support
+- Gemini model preference
 
-### Agent Types
-| Type | Use When |
-|------|----------|
-| `LlmAgent` | LLM reasoning, conversation, tool use (most common) |
-| `BaseAgent` | Custom non-LLM logic, extend and implement `run_async()` |
-| `SequentialAgent` | Execute steps in order |
-| `ParallelAgent` | Execute steps concurrently |
-| `LoopAgent` | Repeat until condition |
+## Decision Framework
 
-### Tool Definitions
+### Agent Type Selection
 
-**Docstrings are MANDATORY** - the LLM reads them to understand tools:
+| Need | Agent Type | RAG Query |
+|------|------------|-----------|
+| LLM reasoning with tools | `LlmAgent` | `"LlmAgent configuration"` |
+| Custom non-LLM logic | `BaseAgent` | `"BaseAgent implementation"` |
+| Sequential pipeline | `SequentialAgent` | `"SequentialAgent example"` |
+| Parallel execution | `ParallelAgent` | `"ParallelAgent concurrent"` |
+| Iteration patterns | `LoopAgent` | `"LoopAgent termination"` |
 
-```python
-def my_tool(query: str) -> str:
-    """Short description shown to LLM.
+**Query RAG**: `mcp__agentic-rag__query_code("agent type example", frameworks=["adk"])`
 
-    Args:
-        query: Description of the parameter
+## Critical Gotchas
 
-    Returns:
-        Description of return value
-    """
-    return result
-```
+These are NOT in docs or easy to discover:
 
-### ToolContext
+1. **Export as `root_agent`** - ADK expects this exact name in `agent.py`
+2. **Docstrings are MANDATORY for tools** - LLM reads them; missing = tool won't work
+3. **NEVER document ToolContext** - It's auto-injected; including it in docstring breaks inference
+4. **No quotes in .env** - `GOOGLE_API_KEY=value` not `GOOGLE_API_KEY="value"`
+5. **Sub-agent descriptions matter** - Vague descriptions = poor routing decisions
 
-`ToolContext` is auto-injected - **NEVER document it**:
+## Workflow: Creating an ADK Agent
 
-```python
-from google.adk.tools import ToolContext
+### Step 1: Project Setup
+**RAG Query**: `mcp__agentic-rag__query_docs("ADK project structure", frameworks=["adk"])`
 
-def my_tool(query: str, tool_context: ToolContext) -> dict:
-    # tool_context NOT in docstring - it's auto-injected
-    user = tool_context.state.get("user")
-    return {"result": query, "user": user}
-```
+### Step 2: Agent Definition
+**RAG Query**: `mcp__agentic-rag__query_code("LlmAgent basic example", frameworks=["adk"])`
 
-## Common Gotchas
+### Step 3: Tool Creation
+**RAG Query**: `mcp__agentic-rag__query_code("function tool definition", frameworks=["adk"])`
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Tool not working | Missing docstring | Add docstring with Args/Returns |
-| ToolContext error | In docstring | Remove from docstring |
-| Import error | Wrong path | `from google.adk.agents import LlmAgent` |
-| Auth error | .env format | `GOOGLE_API_KEY=value` (no quotes!) |
-| Sub-agent not called | Bad description | Make description specific for routing |
+Remember: Every tool needs a docstring with Args and Returns.
 
-## Quick Patterns
+### Step 4: State Management (if needed)
+**RAG Query**: `mcp__agentic-rag__query_code("agent state management", frameworks=["adk"])`
 
-### Basic Agent
-```python
-from google.adk.agents import LlmAgent
+### Step 5: Multi-Agent (if needed)
+**RAG Query**: `mcp__agentic-rag__query_code("sub_agents routing", frameworks=["adk"])`
 
-root_agent = LlmAgent(
-    name="my_agent",
-    model="gemini-2.0-flash",
-    instruction="You are a helpful assistant.",
-    tools=[my_tool]
-)
-```
+### Step 6: Testing
+**RAG Query**: `mcp__agentic-rag__query_docs("ADK testing", frameworks=["adk"])`
 
-### With Sub-agents
-```python
-root_agent = LlmAgent(
-    name="coordinator",
-    model="gemini-2.0-flash",
-    instruction="Route to specialists based on query type.",
-    sub_agents=[support_agent, sales_agent]
-)
-```
+## Common Error Patterns
 
-### With State
-```python
-root_agent = LlmAgent(
-    name="stateful_agent",
-    model="gemini-2.0-flash",
-    instruction="Track user preferences.",
-    state={"user_name": None, "preferences": {}}
-)
-```
+| Symptom | Likely Cause | RAG Query |
+|---------|--------------|-----------|
+| Tool not invoked | Missing/bad docstring | `"tool docstring format"` |
+| Import error | Wrong module path | `"ADK imports"` |
+| Auth failure | .env formatting | `"ADK authentication"` |
+| Sub-agent ignored | Poor description | `"sub_agents description"` |
+| State not persisting | Wrong state access | `"ToolContext state"` |
 
-## When to Use RAG
+## Advanced Features
 
-Query RAG for:
-- Full API documentation
-- Complex configuration options
-- Advanced features (streaming, A2A, visual builder)
-
-```python
-mcp__agentic-rag__query_docs("topic", frameworks=["adk"])
-mcp__agentic-rag__query_code("pattern", frameworks=["adk"])
-```
+Query RAG when you need:
+- Streaming: `"ADK streaming response"`
+- A2A Protocol: `"agent to agent protocol"`
+- Visual Builder: `"ADK visual builder"`
+- Callbacks: `"ADK callbacks events"`
+- Memory/Sessions: `"ADK session memory"`

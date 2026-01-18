@@ -1,115 +1,104 @@
 ---
 name: Agent Debugging
-description: Systematic debugging patterns for all agentic frameworks. Use when troubleshooting agent issues.
+description: Systematic debugging workflow for all agentic frameworks. Directs to RAG for solutions.
 ---
 
-# Agent Debugging Patterns
+# Agent Debugging Workflow
 
 ## Diagnostic Categories
 
 | Category | Symptoms | First Checks |
 |----------|----------|--------------|
-| **IMPORT** | ModuleNotFoundError, ImportError | pip list, import paths |
+| **IMPORT** | ModuleNotFoundError, ImportError | pip list, venv active, import paths |
 | **TOOL** | "tool not found", wrong args | docstrings, decorators, registration |
-| **AUTH** | 401, 403, "invalid key" | .env, env vars, key format |
-| **CONFIG** | "missing config", wrong values | .env format, required fields |
-| **RUNTIME** | Unexpected behavior, crashes | logs, state, callbacks |
-| **MULTI_AGENT** | Wrong routing, delegation fails | descriptions, agent list |
-| **STREAMING** | Connection issues, timeouts | SSE config, network |
+| **AUTH** | 401, 403, "invalid key" | .env exists, env vars set, key format |
+| **CONFIG** | "missing config", wrong values | .env format (no quotes!), required fields |
+| **RUNTIME** | Unexpected behavior, crashes | logs, state inspection, callbacks |
+| **MULTI_AGENT** | Wrong routing, delegation fails | agent descriptions, routing logic |
+| **STREAMING** | Connection issues, timeouts | SSE config, network, timeout settings |
 
 ## Systematic Debug Process
 
-### 1. Reproduce
-```bash
-# Run with verbose/debug flags
-python agent.py --verbose
-ADK: adk web --trace_to_cloud
-LangChain: LANGCHAIN_TRACING_V2=true
-CrewAI: Agent(verbose=True)
-```
+### Step 1: Reproduce
+Enable verbose/trace mode for the framework.
+**RAG Query**: `mcp__agentic-rag__query_docs("[framework] debugging tracing", frameworks=[detected])`
 
-### 2. Isolate
+### Step 2: Isolate
 - Comment out components one by one
 - Test tool functions in isolation
 - Check agent without tools first
+- Test with minimal prompt
 
-### 3. Diagnose
-- Read error message carefully
-- Check framework-specific gotchas
-- Query RAG for similar errors
+### Step 3: Categorize
+Match symptoms to category above. This determines the fix strategy.
 
-### 4. Fix & Verify
-- Make minimal fix
+### Step 4: Diagnose
+**RAG Query**: `mcp__agentic-rag__query_docs("error: [error message]", frameworks=[detected])`
+
+Check framework-specific gotchas in the relevant @framework skill.
+
+### Step 5: Fix & Verify
+- Make ONE minimal change
 - Run verification command
-- Document what worked
+- If fails, revert and try next hypothesis
+
+## Quick Diagnostics
+
+### Import Failures
+1. Is virtual environment active?
+2. Is package installed? (`pip list | grep [package]`)
+3. Is import path correct for version?
+
+**RAG Query**: `mcp__agentic-rag__query_docs("[framework] installation imports", frameworks=[detected])`
+
+### Tool Not Working
+1. Does tool have a docstring? (Most frameworks require it)
+2. Is decorator applied correctly?
+3. Is tool registered with agent?
+4. Do parameter types match docstring?
+
+**RAG Query**: `mcp__agentic-rag__query_code("tool definition", frameworks=[detected])`
+
+### Auth Failures
+1. Does .env file exist and load?
+2. Is key format correct? (NO quotes in .env files)
+3. Is env var name correct for framework?
+4. Is key valid and not expired?
+
+**RAG Query**: `mcp__agentic-rag__query_docs("[framework] authentication", frameworks=[detected])`
+
+### Wrong Routing (Multi-Agent)
+1. Are agent descriptions specific enough?
+2. Is routing logic correct?
+3. Are all agents registered?
+
+**RAG Query**: `mcp__agentic-rag__query_code("agent routing delegation", frameworks=[detected])`
 
 ## Framework Debug Commands
 
-| Framework | Trace | Log Config |
-|-----------|-------|------------|
-| ADK | `adk web --trace_to_cloud` | LoggingPlugin |
-| OpenAI | `DEBUG=1` env var | logging.basicConfig |
-| LangChain | LangSmith | set_debug(True) |
-| LangGraph | LangSmith | set_debug(True) |
-| CrewAI | `verbose=True` | Agent(verbose=True) |
+| Framework | How to Enable Tracing | RAG Query |
+|-----------|----------------------|-----------|
+| ADK | Tracing plugins | `"ADK tracing debugging"` |
+| OpenAI | Debug env var | `"openai agents debug"` |
+| LangChain | LangSmith / set_debug | `"langchain tracing langsmith"` |
+| LangGraph | LangSmith | `"langgraph debugging"` |
+| CrewAI | verbose=True | `"crewai verbose debugging"` |
+| Anthropic | Logging | `"anthropic logging debug"` |
 
-## Quick Diagnostic Scripts
+## Common Fix Patterns
 
-### Check Imports
-```python
-frameworks = [
-    ("google.adk.agents", "LlmAgent", "ADK"),
-    ("agents", "Agent", "OpenAI"),
-    ("langchain_core.tools", "tool", "LangChain"),
-    ("langgraph.graph", "StateGraph", "LangGraph"),
-    ("crewai", "Agent", "CrewAI"),
-]
-for module, attr, name in frameworks:
-    try:
-        exec(f"from {module} import {attr}")
-        print(f"{name}: OK")
-    except ImportError as e:
-        print(f"{name}: {e}")
-```
+| Problem | Typical Fix |
+|---------|-------------|
+| Missing module | `pip install [package]` + check venv |
+| Tool ignored | Add/fix docstring with Args/Returns |
+| Auth failure | Check .env format, no quotes |
+| Wrong agent called | Make descriptions more specific |
+| State lost | Check state passing between nodes/agents |
+| Infinite loop | Add termination condition, max iterations |
 
-### Check Environment
-```python
-import os
-keys = ['GOOGLE_API_KEY', 'OPENAI_API_KEY', 'ANTHROPIC_API_KEY']
-for k in keys:
-    v = os.environ.get(k)
-    print(f"{k}: {'SET' if v else 'NOT SET'}")
-```
+## When Nothing Works
 
-### Validate Agent
-```python
-from module import root_agent
-print(f"Name: {root_agent.name}")
-print(f"Tools: {getattr(root_agent, 'tools', [])}")
-```
-
-## Common Fixes by Category
-
-### Import Errors
-1. `pip install [package]`
-2. Check virtual environment is active
-3. Verify import path matches package structure
-
-### Tool Errors
-1. Add/fix docstring (most frameworks require it)
-2. Add `@tool` decorator if needed
-3. Verify tool is in agent's tools list
-4. Check parameter types match docstring
-
-### Auth Errors
-1. Check .env file exists and is loaded
-2. Verify key format (no quotes in .env)
-3. Check correct env var name
-4. Verify key is valid (not expired)
-
-## When to Use RAG
-
-```python
-mcp__agentic-rag__query_docs("error: [message]", frameworks=[detected])
-mcp__agentic-rag__query_docs("debugging [framework]", frameworks=[detected])
-```
+1. Strip to minimal reproducer
+2. Query RAG with exact error: `mcp__agentic-rag__query_docs("exact error message")`
+3. Check framework's GitHub issues
+4. Verify you're on supported version

@@ -1,97 +1,96 @@
 ---
 name: CrewAI
-description: Patterns, idioms, and gotchas for CrewAI. Use when building multi-agent crews.
+description: Workflow patterns and gotchas for CrewAI. Directs to RAG for implementation.
 ---
 
-# CrewAI Patterns
+# CrewAI Workflow
 
-## Key Idioms
+## When to Choose CrewAI
 
-### Agent Definition
-```python
-from crewai import Agent
+- Building role-based multi-agent systems
+- Need agents with distinct personas
+- Want task delegation patterns
+- Building "crew" style collaboration
 
-researcher = Agent(
-    role="Research Analyst",
-    goal="Find and analyze information",
-    backstory="You are an expert researcher with years of experience.",
-    tools=[search_tool],
-    verbose=True
-)
-```
+## Decision Framework
 
-### Task Definition
-```python
-from crewai import Task
+### Component Selection
 
-research_task = Task(
-    description="Research the topic: {topic}",
-    expected_output="A comprehensive research report",
-    agent=researcher
-)
-```
+| Need | Component | RAG Query |
+|------|-----------|-----------|
+| Define specialist | Agent | `"crewai agent role goal"` |
+| Define work unit | Task | `"crewai task description"` |
+| Coordinate agents | Crew | `"crew process sequential"` |
+| Custom capabilities | Tool | `"crewai custom tool"` |
+| Structured output | Output schemas | `"crewai output pydantic"` |
 
-### Crew Assembly
-```python
-from crewai import Crew, Process
+**Query RAG**: `mcp__agentic-rag__query_code("component example", frameworks=["crewai"])`
 
-crew = Crew(
-    agents=[researcher, writer],
-    tasks=[research_task, writing_task],
-    process=Process.sequential,
-    verbose=True
-)
+## Critical Gotchas
 
-result = crew.kickoff(inputs={"topic": "AI agents"})
-```
+These define CrewAI success:
 
-## Common Gotchas
+1. **Role/Goal/Backstory triad** - All three shape agent behavior significantly
+2. **Task descriptions are prompts** - Vague descriptions = vague results
+3. **Expected output matters** - Specify format explicitly or get random structure
+4. **Process type affects flow** - `sequential` vs `hierarchical` changes everything
+5. **Tool names must be clear** - Agent reads tool name to decide usage
+6. **Delegation can loop** - Agents may delegate back and forth infinitely
+7. **Memory is per-crew** - Not shared across different crew instances
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Agent not working | Missing fields | Include role, goal, backstory |
-| Task error | No agent | Assign agent to task |
-| Crew error | Circular dependency | Check task order |
-| Tool error | Wrong format | Use CrewAI tool decorators |
+## Workflow: Building a CrewAI System
 
-## Quick Patterns
+### Step 1: Define Agents
+**RAG Query**: `mcp__agentic-rag__query_code("Agent role goal backstory", frameworks=["crewai"])`
 
-### Tool Creation
-```python
-from crewai.tools import tool
+Each agent needs a clear role, specific goal, and relevant backstory.
 
-@tool
-def search_tool(query: str) -> str:
-    """Search the web for information."""
-    return f"Results for: {query}"
-```
+### Step 2: Create Tools
+**RAG Query**: `mcp__agentic-rag__query_code("crewai tool decorator", frameworks=["crewai"])`
 
-### Hierarchical Process
-```python
-crew = Crew(
-    agents=[manager, researcher, writer],
-    tasks=[research_task, writing_task],
-    process=Process.hierarchical,
-    manager_agent=manager
-)
-```
+### Step 3: Define Tasks
+**RAG Query**: `mcp__agentic-rag__query_code("Task description expected_output", frameworks=["crewai"])`
 
-### With Memory
-```python
-crew = Crew(
-    agents=[...],
-    tasks=[...],
-    memory=True,
-    embedder={
-        "provider": "openai",
-        "config": {"model": "text-embedding-3-small"}
-    }
-)
-```
+Tasks must specify: description, expected_output, assigned agent.
 
-## When to Use RAG
+### Step 4: Assemble Crew
+**RAG Query**: `mcp__agentic-rag__query_code("Crew agents tasks process", frameworks=["crewai"])`
 
-```python
-mcp__agentic-rag__query_docs("topic", frameworks=["crewai"])
-mcp__agentic-rag__query_code("pattern", frameworks=["crewai"])
-```
+### Step 5: Execute
+**RAG Query**: `mcp__agentic-rag__query_code("crew kickoff inputs", frameworks=["crewai"])`
+
+## Common Error Patterns
+
+| Symptom | Likely Cause | RAG Query |
+|---------|--------------|-----------|
+| Agent off-topic | Bad role/goal | `"agent role definition"` |
+| Wrong output format | Missing expected_output | `"task expected_output"` |
+| Infinite delegation | Allow_delegation loop | `"delegation control"` |
+| Tool not used | Unclear tool name | `"tool naming crewai"` |
+| Tasks out of order | Wrong process type | `"sequential hierarchical"` |
+
+## Process Types
+
+| Type | When to Use | RAG Query |
+|------|-------------|-----------|
+| Sequential | Tasks depend on previous output | `"sequential process"` |
+| Hierarchical | Manager delegates to workers | `"hierarchical manager"` |
+
+## Crew Patterns
+
+### Research Crew
+Researcher → Analyst → Writer pipeline.
+**RAG Query**: `mcp__agentic-rag__query_code("research crew example", frameworks=["crewai"])`
+
+### Support Crew
+Triage → Specialist routing.
+**RAG Query**: `mcp__agentic-rag__query_code("support crew routing", frameworks=["crewai"])`
+
+## Advanced Features
+
+Query RAG when you need:
+- Memory: `"crewai memory persistence"`
+- Callbacks: `"crewai task callbacks"`
+- Async execution: `"crewai async kickoff"`
+- Custom LLM: `"crewai custom llm"`
+- Output validation: `"crewai pydantic output"`

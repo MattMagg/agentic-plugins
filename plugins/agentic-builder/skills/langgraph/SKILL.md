@@ -1,83 +1,99 @@
 ---
 name: LangGraph
-description: Patterns, idioms, and gotchas for LangGraph. Use when building graph-based agents.
+description: Workflow patterns and gotchas for LangGraph. Directs to RAG for implementation.
 ---
 
-# LangGraph Patterns
+# LangGraph Workflow
 
-## Key Idioms
+## When to Choose LangGraph
 
-### State Definition
-```python
-from typing import TypedDict, Annotated
-from langgraph.graph.message import add_messages
+- Need stateful, cyclic agent workflows
+- Building complex multi-step reasoning
+- Want conditional branching and loops
+- Require human-in-the-loop checkpoints
 
-class State(TypedDict):
-    messages: Annotated[list, add_messages]
-    context: str
-```
+## Decision Framework
 
-### Graph Construction
-```python
-from langgraph.graph import StateGraph, START, END
+### Graph Pattern Selection
 
-graph = StateGraph(State)
-graph.add_node("agent", agent_node)
-graph.add_node("tools", tool_node)
+| Need | Pattern | RAG Query |
+|------|---------|-----------|
+| Sequential steps | Linear graph | `"simple sequential graph"` |
+| Decision branching | Conditional edges | `"conditional edge routing"` |
+| Iteration/retry | Cycles | `"graph cycle loop"` |
+| Parallel execution | Parallel branches | `"parallel graph execution"` |
+| Human approval | Checkpoints | `"human in loop checkpoint"` |
+| Agent with tools | ReAct pattern | `"react agent langgraph"` |
 
-graph.add_edge(START, "agent")
-graph.add_conditional_edges("agent", should_continue)
-graph.add_edge("tools", "agent")
-```
+**Query RAG**: `mcp__agentic-rag__query_code("pattern example", frameworks=["langgraph"])`
 
-### Node Functions
-```python
-def agent_node(state: State) -> dict:
-    response = llm.invoke(state["messages"])
-    return {"messages": [response]}
-```
+## Critical Gotchas
 
-## Common Gotchas
+These cause debugging nightmares:
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| State not updating | Wrong return type | Return dict with state keys |
-| Infinite loop | Bad condition | Check `should_continue` logic |
-| Missing edge | Forgot START/END | Add all required edges |
-| Type error | Wrong annotation | Use `Annotated[list, add_messages]` |
+1. **State must be TypedDict** - Not a regular dict; needs type annotations
+2. **Node returns partial state** - Return only keys you're updating, not full state
+3. **END is special** - Import it: `from langgraph.graph import END`
+4. **Edges define flow** - Forgetting an edge = node never reached
+5. **Conditional edges return node names** - Return the string name, not the function
+6. **Compile before run** - `graph.compile()` is required before invoke
+7. **Checkpointer for memory** - Without it, state resets each run
+8. **State channels merge** - Multiple updates to same key need reducer
 
-## Quick Patterns
+## Workflow: Building a LangGraph Agent
 
-### Conditional Routing
-```python
-def should_continue(state: State) -> str:
-    last_message = state["messages"][-1]
-    if last_message.tool_calls:
-        return "tools"
-    return END
-```
+### Step 1: State Definition
+**RAG Query**: `mcp__agentic-rag__query_code("TypedDict state definition", frameworks=["langgraph"])`
 
-### With Memory
-```python
-from langgraph.checkpoint.memory import MemorySaver
+Define your state schema with TypedDict and Annotated for reducers.
 
-checkpointer = MemorySaver()
-app = graph.compile(checkpointer=checkpointer)
+### Step 2: Node Functions
+**RAG Query**: `mcp__agentic-rag__query_code("graph node function", frameworks=["langgraph"])`
 
-# Invoke with thread_id for persistence
-result = app.invoke(input, config={"configurable": {"thread_id": "1"}})
-```
+Each node takes state, returns partial state update.
 
-### Human-in-the-Loop
-```python
-graph.add_node("human", human_node)
-graph.add_edge("agent", "human")
-# Human node waits for input
-```
+### Step 3: Graph Construction
+**RAG Query**: `mcp__agentic-rag__query_code("StateGraph add_node add_edge", frameworks=["langgraph"])`
 
-## When to Use RAG
+### Step 4: Edge Definition
+**RAG Query**: `mcp__agentic-rag__query_code("conditional_edges routing", frameworks=["langgraph"])`
 
-```python
-mcp__agentic-rag__query_docs("topic", frameworks=["langgraph"])
-mcp__agentic-rag__query_code("pattern", frameworks=["langgraph"])
-```
+### Step 5: Compilation
+**RAG Query**: `mcp__agentic-rag__query_code("graph compile checkpointer", frameworks=["langgraph"])`
+
+### Step 6: Execution
+**RAG Query**: `mcp__agentic-rag__query_code("compiled graph invoke stream", frameworks=["langgraph"])`
+
+## Common Error Patterns
+
+| Symptom | Likely Cause | RAG Query |
+|---------|--------------|-----------|
+| Node never runs | Missing edge | `"graph edge definition"` |
+| State not updating | Returning wrong keys | `"node state return"` |
+| Infinite loop | No END condition | `"conditional edge END"` |
+| Type error | State not TypedDict | `"TypedDict state"` |
+| Memory lost | No checkpointer | `"MemorySaver persistence"` |
+| Merge conflict | Missing reducer | `"Annotated reducer operator"` |
+
+## Graph Patterns
+
+### Decision Tree
+Nodes for each decision point, conditional edges for branching.
+**RAG Query**: `mcp__agentic-rag__query_code("decision tree graph", frameworks=["langgraph"])`
+
+### ReAct Agent
+Reason-Act-Observe loop with tool calling.
+**RAG Query**: `mcp__agentic-rag__query_code("react agent pattern", frameworks=["langgraph"])`
+
+### Plan-and-Execute
+Planning node, execution loop, verification.
+**RAG Query**: `mcp__agentic-rag__query_code("plan execute pattern", frameworks=["langgraph"])`
+
+## Advanced Features
+
+Query RAG when you need:
+- Streaming: `"langgraph streaming events"`
+- Subgraphs: `"nested subgraph composition"`
+- Human-in-loop: `"interrupt checkpoint approval"`
+- Time travel: `"state history replay"`
+- Parallel branches: `"parallel node execution"`

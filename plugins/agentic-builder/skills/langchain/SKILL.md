@@ -1,80 +1,89 @@
 ---
 name: LangChain
-description: Patterns, idioms, and gotchas for LangChain. Use when building LangChain chains and agents.
+description: Workflow patterns and gotchas for LangChain. Directs to RAG for implementation.
 ---
 
-# LangChain Patterns
+# LangChain Workflow
 
-## Key Idioms
+## When to Choose LangChain
 
-### Tool Definitions
-```python
-from langchain_core.tools import tool
+- Need composable chains with many integrations
+- Building RAG/retrieval applications
+- Want broad LLM provider support
+- Need document processing pipelines
 
-@tool
-def search_tool(query: str) -> str:
-    """Search for information.
+## Decision Framework
 
-    Args:
-        query: The search query
-    """
-    return f"Results for {query}"
-```
+### Component Selection
 
-### Chain Composition
-```python
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai import ChatOpenAI
+| Need | Component | RAG Query |
+|------|-----------|-----------|
+| Basic LLM call | ChatModel | `"ChatOpenAI initialization"` |
+| Prompt templating | PromptTemplate | `"prompt template variables"` |
+| Composable steps | LCEL chains | `"LCEL chain composition"` |
+| Tool execution | Tool/StructuredTool | `"langchain tool definition"` |
+| Document retrieval | Retriever | `"retriever vector store"` |
+| Conversation memory | Memory classes | `"conversation buffer memory"` |
 
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a helpful assistant."),
-    ("human", "{input}")
-])
+**Query RAG**: `mcp__agentic-rag__query_code("component example", frameworks=["langchain"])`
 
-llm = ChatOpenAI(model="gpt-4")
-chain = prompt | llm
-```
+## Critical Gotchas
 
-### Agent Creation
-```python
-from langchain.agents import create_tool_calling_agent, AgentExecutor
+These trip up everyone:
 
-agent = create_tool_calling_agent(llm, tools, prompt)
-executor = AgentExecutor(agent=agent, tools=tools)
-```
+1. **LCEL is the pattern** - Use `chain = prompt | llm | parser`, not legacy chains
+2. **RunnablePassthrough for context** - Pass data through the chain explicitly
+3. **Output parsers matter** - Without one, you get raw text not structured data
+4. **Invoke vs stream vs batch** - Different methods for different use cases
+5. **Async needs `ainvoke`** - Sync methods block; use async for concurrency
+6. **Memory isn't automatic** - You must explicitly add and manage it
+7. **API keys via env vars** - Each provider has its own key format
 
-## Common Gotchas
+## Workflow: Building a LangChain Application
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| Chain error | Wrong key | Match input/output variable names |
-| Tool error | Missing decorator | Add `@tool` decorator |
-| Import error | Wrong package | Use `langchain_core`, `langchain_openai` |
-| Memory error | Deprecated | Use `langgraph` for stateful agents |
+### Step 1: Dependencies
+**RAG Query**: `mcp__agentic-rag__query_docs("langchain installation packages", frameworks=["langchain"])`
 
-## Quick Patterns
+### Step 2: LLM Setup
+**RAG Query**: `mcp__agentic-rag__query_code("ChatOpenAI ChatAnthropic setup", frameworks=["langchain"])`
 
-### LCEL Chain
-```python
-chain = (
-    {"context": retriever, "question": RunnablePassthrough()}
-    | prompt
-    | llm
-    | StrOutputParser()
-)
-```
+### Step 3: Prompt Design
+**RAG Query**: `mcp__agentic-rag__query_code("ChatPromptTemplate messages", frameworks=["langchain"])`
 
-### With Retrieval
-```python
-from langchain_community.vectorstores import FAISS
+### Step 4: Chain Composition
+**RAG Query**: `mcp__agentic-rag__query_code("LCEL chain pipe operator", frameworks=["langchain"])`
 
-vectorstore = FAISS.from_documents(docs, embeddings)
-retriever = vectorstore.as_retriever()
-```
+### Step 5: Tool Integration (if needed)
+**RAG Query**: `mcp__agentic-rag__query_code("StructuredTool from_function", frameworks=["langchain"])`
 
-## When to Use RAG
+### Step 6: Retrieval (if RAG)
+**RAG Query**: `mcp__agentic-rag__query_code("vector store retriever", frameworks=["langchain"])`
 
-```python
-mcp__agentic-rag__query_docs("topic", frameworks=["langchain"])
-mcp__agentic-rag__query_code("pattern", frameworks=["langchain"])
-```
+## Common Error Patterns
+
+| Symptom | Likely Cause | RAG Query |
+|---------|--------------|-----------|
+| Chain doesn't work | Wrong pipe order | `"LCEL chain debugging"` |
+| Output is raw text | Missing parser | `"output parser structured"` |
+| Context lost | Missing passthrough | `"RunnablePassthrough"` |
+| Async timeout | Using sync method | `"langchain async ainvoke"` |
+| Memory not working | Not connected | `"memory chain integration"` |
+
+## LangChain vs LangGraph
+
+| Use Case | Choose |
+|----------|--------|
+| Linear pipelines | LangChain LCEL |
+| Conditional branching | LangGraph |
+| Cycles/loops | LangGraph |
+| Simple retrieval | LangChain |
+| Complex agent workflows | LangGraph |
+
+## Advanced Features
+
+Query RAG when you need:
+- Streaming: `"langchain streaming callback"`
+- Callbacks/tracing: `"langchain callbacks tracing"`
+- Custom chains: `"custom runnable class"`
+- Caching: `"langchain caching responses"`
+- Fallbacks: `"chain fallback retry"`

@@ -1,99 +1,107 @@
 ---
 name: Agent Deployment
-description: Production deployment patterns for agentic systems. Use when deploying agents to production.
+description: Production deployment workflow for agentic systems. Directs to RAG for implementation.
 ---
 
-# Agent Deployment Patterns
+# Agent Deployment Workflow
 
-## Deployment Options by Framework
+## Deployment Decision Framework
 
-| Framework | Recommended | Alternative |
-|-----------|-------------|-------------|
-| ADK | Agent Engine, Cloud Run | GKE, local |
-| OpenAI | Any Python hosting | Serverless |
-| LangChain | LangServe, Cloud Run | Docker |
-| LangGraph | LangGraph Platform | Cloud Run |
-| CrewAI | CrewAI Enterprise | Docker |
+| Framework | Primary Option | Alternative | RAG Query |
+|-----------|---------------|-------------|-----------|
+| ADK | Agent Engine (Vertex AI) | Cloud Run, GKE | `"ADK deployment agent engine"` |
+| OpenAI | Any Python hosting | Serverless, Docker | `"openai agents deployment"` |
+| LangChain | LangServe, Cloud Run | Docker, K8s | `"langchain langserve deployment"` |
+| LangGraph | LangGraph Platform | Cloud Run | `"langgraph platform deployment"` |
+| CrewAI | CrewAI Enterprise | Docker | `"crewai deployment production"` |
+| Anthropic | Any Python hosting | Docker, Serverless | `"anthropic agent deployment"` |
 
 ## Pre-Deployment Checklist
 
+### Code Readiness
 - [ ] All tests passing
-- [ ] Environment variables documented
-- [ ] Secrets in secret manager (not .env)
-- [ ] Rate limiting configured
 - [ ] Error handling complete
 - [ ] Logging configured
-- [ ] Monitoring set up
-- [ ] Guardrails in place
+- [ ] Input validation in place
+- [ ] Output guardrails active
 
-## ADK Deployment
+### Configuration
+- [ ] Environment variables documented
+- [ ] Secrets in secret manager (NOT in .env or code)
+- [ ] Rate limiting configured
+- [ ] Token limits set
+- [ ] Timeout values appropriate
 
-### Agent Engine (Recommended)
-```python
-# Deploy to Vertex AI Agent Engine
-from google.adk.deploy import deploy_to_agent_engine
-
-deploy_to_agent_engine(
-    agent=root_agent,
-    project_id="my-project",
-    location="us-central1"
-)
-```
-
-### Cloud Run
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["python", "-m", "adk", "serve", "--host", "0.0.0.0"]
-```
-
-## Security Checklist
-
-- [ ] Input validation/sanitization
-- [ ] Output guardrails
+### Security
 - [ ] API key rotation plan
 - [ ] Audit logging enabled
-- [ ] Rate limiting per user
-- [ ] Token limits set
 - [ ] PII handling documented
+- [ ] Input sanitization active
+- [ ] Output filtering configured
 
-## Environment Configuration
+### Monitoring
+- [ ] Health check endpoint
+- [ ] Metrics collection
+- [ ] Alerting rules defined
+- [ ] Log aggregation setup
 
-### Development
-```env
-ENVIRONMENT=development
-LOG_LEVEL=DEBUG
-TRACE_ENABLED=true
-```
+## Deployment Workflow
 
-### Production
-```env
-ENVIRONMENT=production
-LOG_LEVEL=INFO
-TRACE_ENABLED=false
-SECRET_MANAGER=gcp  # or aws, azure
-```
+### Step 1: Environment Configuration
+**RAG Query**: `mcp__agentic-rag__query_docs("[framework] environment configuration", frameworks=[detected])`
 
-## Monitoring Setup
+Production differs from development:
+- LOG_LEVEL: INFO (not DEBUG)
+- TRACE_ENABLED: false (or sampling)
+- Secrets: Use secret manager, not .env
 
-### Key Metrics
-- Request latency (p50, p95, p99)
-- Error rate
-- Token usage
-- Tool call frequency
-- Agent routing accuracy
+### Step 2: Containerization (if applicable)
+**RAG Query**: `mcp__agentic-rag__query_code("[framework] dockerfile", frameworks=[detected])`
 
-### Alerting
-- Error rate > 1%
-- Latency p95 > 5s
-- Token usage spike
+### Step 3: Platform Deployment
+**RAG Query**: `mcp__agentic-rag__query_docs("[framework] [platform] deployment", frameworks=[detected])`
 
-## When to Use RAG
+### Step 4: Monitoring Setup
+**RAG Query**: `mcp__agentic-rag__query_docs("[framework] monitoring observability", frameworks=[detected])`
 
-```python
-mcp__agentic-rag__query_docs("deployment [framework]", frameworks=[fw])
-mcp__agentic-rag__query_docs("production security", frameworks=[fw])
-```
+## Key Production Metrics
+
+| Metric | Alert Threshold | Why It Matters |
+|--------|-----------------|----------------|
+| Latency p95 | > 5s | User experience |
+| Error rate | > 1% | Reliability |
+| Token usage | Spike > 200% | Cost control |
+| Tool failures | > 5% | Agent effectiveness |
+| Routing accuracy | < 90% | Multi-agent health |
+
+## Security Considerations
+
+### Input Validation
+- Sanitize user input before passing to agent
+- Limit input length
+- Filter known attack patterns
+
+**RAG Query**: `mcp__agentic-rag__query_docs("agent input validation security", frameworks=[detected])`
+
+### Output Guardrails
+- Filter sensitive information
+- Prevent prompt leakage
+- Validate tool outputs
+
+**RAG Query**: `mcp__agentic-rag__query_docs("agent guardrails output filtering", frameworks=[detected])`
+
+### Secret Management
+- Never hardcode API keys
+- Use platform secret managers (GCP Secret Manager, AWS Secrets Manager, etc.)
+- Rotate keys regularly
+
+**RAG Query**: `mcp__agentic-rag__query_docs("[framework] secret management", frameworks=[detected])`
+
+## Scaling Considerations
+
+| Concern | Solution | RAG Query |
+|---------|----------|-----------|
+| Cold starts | Keep warm instances | `"[framework] cold start"` |
+| Concurrent requests | Queue + workers | `"[framework] scaling"` |
+| Token limits | Request batching | `"[framework] rate limiting"` |
+| State persistence | External store | `"[framework] state persistence"` |
