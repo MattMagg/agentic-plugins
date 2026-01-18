@@ -34,7 +34,7 @@ These cause silent failures or confusion:
 2. **Type hints are required** - Parameters need type annotations for schema generation
 3. **Docstrings define the schema** - LLM uses docstring for understanding, not just comments
 4. **OPENAI_API_KEY env var** - Must be set; SDK doesn't prompt for it
-5. **Model names are specific** - `gpt-4`, `gpt-4-turbo`, `gpt-4o` (not `gpt4` or `GPT-4`)
+5. **Model names are specific** - `gpt-5.2`, `gpt-5.2-codex` (not `gpt5` or `GPT-5.2`)
 6. **Handoff descriptions drive routing** - Vague = poor decisions
 
 ## Workflow: Creating an OpenAI Agent

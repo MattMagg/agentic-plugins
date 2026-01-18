@@ -157,7 +157,7 @@ def my_tool(query: str) -> str:
 # Agent definition
 root_agent = LlmAgent(
     name="my_agent",
-    model="gemini-2.0-flash",
+    model="gemini-3-flash",
     instruction="You are a helpful assistant.",
     tools=[my_tool]
 )
@@ -175,7 +175,7 @@ def my_tool(query: str) -> str:
 
 agent = Agent(
     name="my_agent",
-    model="gpt-4",
+    model="gpt-5.2",
     instructions="You are a helpful assistant.",
     tools=[my_tool]
 )
