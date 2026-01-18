@@ -4,7 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Claude Code plugin marketplace for agentic development frameworks. Currently contains the `adk-builder` plugin for Google Agent Development Kit (ADK). The marketplace will expand to support other frameworks (OpenAI Agents SDK, etc.).
+This is a Claude Code plugin marketplace for agentic development frameworks. Contains two plugins:
+
+- **adk-builder** - Specialized plugin for Google Agent Development Kit (ADK) with spec-driven workflows
+- **agentic-builder** - Framework-agnostic plugin with RAG-grounded knowledge across ADK, OpenAI, LangChain, LangGraph, Anthropic, and CrewAI
 
 ## Architecture
 
@@ -15,10 +18,21 @@ agentic-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json      # Plugin registry
 └── plugins/
-    └── adk-builder/
+    ├── adk-builder/          # ADK-specific plugin
+    │   ├── .claude-plugin/
+    │   │   └── plugin.json
+    │   ├── commands/
+    │   ├── agents/
+    │   └── skills/
+    └── agentic-builder/      # Framework-agnostic plugin
         ├── .claude-plugin/
-        │   └── plugin.json   # Plugin manifest
-        └── commands/         # Slash commands (declared in manifest)
+        │   └── plugin.json
+        ├── commands/         # /agentic entry point
+        ├── agents/           # planner, executor, debugger
+        ├── skills/           # 9 skills (6 framework + 3 task)
+        ├── hooks/            # session-start, pre-compact
+        ├── mcp-server/       # RAG query tools
+        └── templates/        # spec.md, plan.md templates
 ```
 
 ### Plugin Manifest
@@ -31,15 +45,23 @@ Per official docs, valid `plugin.json` fields:
 
 ### Commands
 
-Command files (`commands/*.md`) use YAML frontmatter with `name`, `description`. The `/adk` command is the main entry point.
+Command files (`commands/*.md`) use YAML frontmatter with `name`, `description`.
+
+- **adk-builder**: `/adk` - ADK-specific development
+- **agentic-builder**: `/agentic` - Framework-agnostic development with auto-detection
 
 ### State Management
 
-The `/adk` command tracks state in:
+**adk-builder** (`/adk`) tracks state in:
 - `.claude/adk-builder.local.md` - Plugin state (current feature, phase, progress)
-- `plugins/adk-builder/<feature>/spec.md` - Requirements
-- `plugins/adk-builder/<feature>/plan.md` - Implementation steps
-- `plugins/adk-builder/<feature>/session.md` - Build progress log
+- `adk-builder/<feature>/spec.md` - Requirements
+- `adk-builder/<feature>/plan.md` - Implementation steps
+
+**agentic-builder** (`/agentic`) tracks state in:
+- `.claude/agentic-builder.local.md` - Active frameworks, phase, progress
+- `agentic-builder/<feature>/spec.md` - Requirements
+- `agentic-builder/<feature>/plan.md` - Implementation steps
+- `agentic-builder/<feature>/session.md` - Build progress log
 
 ## Development Workflow
 
@@ -93,9 +115,11 @@ Note: Installed plugins are cached. After edits, you must reinstall or bump the 
 /plugin validate .
 ```
 
-## ADK Builder Skills (internal)
+## Plugin Skills
 
-The adk-builder plugin includes knowledge files in `skills/` that commands reference via `@skill-name` syntax. These are NOT part of the official plugin manifest - just markdown files commands can read.
+Skills are knowledge files in `skills/` that commands reference via `@skill-name` syntax. These are NOT part of the official plugin manifest - just markdown files commands can read.
+
+### ADK Builder Skills
 
 | Skill | Purpose |
 |-------|---------|
@@ -105,6 +129,25 @@ The adk-builder plugin includes knowledge files in `skills/` that commands refer
 | `@adk-orchestration` | Multi-agent, streaming, routing |
 | `@adk-production` | Deployment, security, quality, testing |
 | `@adk-advanced` | Extended thinking, visual builder |
+
+### Agentic Builder Skills
+
+**Framework skills** (idioms, gotchas, patterns):
+| Skill | Framework |
+|-------|-----------|
+| `@adk` | Google ADK |
+| `@openai-agents` | OpenAI Agents SDK |
+| `@langchain` | LangChain |
+| `@langgraph` | LangGraph |
+| `@anthropic-agents` | Anthropic Agents SDK |
+| `@crewai` | CrewAI |
+
+**Task skills**:
+| Skill | Purpose |
+|-------|---------|
+| `@debugging` | Cross-framework debugging patterns |
+| `@deployment` | Production deployment checklist |
+| `@orchestration` | Multi-agent coordination patterns |
 
 ## File Conventions
 

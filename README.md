@@ -18,12 +18,24 @@ Then install plugins:
 
 | Plugin | Framework | Description |
 |--------|-----------|-------------|
-| [adk-builder](./plugins/adk-builder) | Google ADK | Autonomous development with planning, coding, debugging agents |
+| [adk-builder](./plugins/adk-builder) | Google ADK | Specialized ADK development with spec-driven workflows |
+| [agentic-builder](./plugins/agentic-builder) | Multi-framework | Framework-agnostic builder with RAG-grounded knowledge |
 
-## Plugin Roadmap
+### agentic-builder
 
-- **openai-agents** - OpenAI Agents SDK
-- *more to come*
+Supports 6 frameworks with RAG-powered documentation access:
+- Google ADK
+- OpenAI Agents SDK
+- LangChain
+- LangGraph
+- Anthropic Agents SDK
+- CrewAI
+
+Features:
+- Auto-detects framework from project code
+- Adaptive workflow: SPEC → PLAN → BUILD → DEBUG
+- MCP server for RAG queries against framework documentation
+- Session hooks for context persistence
 
 ## Contributing
 
