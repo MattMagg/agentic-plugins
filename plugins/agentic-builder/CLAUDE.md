@@ -13,11 +13,11 @@ Framework-agnostic agentic system builder with RAG-grounded knowledge. Supports:
 
 ## Commands
 
-- `/agent` - Main entry point. Auto-detects framework, adapts to task type (build, debug, plan, etc.)
-- `/agent --debug` - Enter debugging mode
-- `/agent --spec` - Force spec/requirements gathering mode
-- `/agent --plan` - Force planning mode
-- `/agent --framework adk` - Specify framework explicitly
+- `/agentic` - Main entry point. Auto-detects framework, adapts to task type (build, debug, plan, etc.)
+- `/agentic --debug` - Enter debugging mode
+- `/agentic --spec` - Force spec/requirements gathering mode
+- `/agentic --plan` - Force planning mode
+- `/agentic --framework adk` - Specify framework explicitly
 
 ## MCP Tools
 
@@ -53,7 +53,7 @@ Session state persists in `.claude/agentic-builder.local.md`:
 ## Workflow
 
 ```
-/agent → State Detection → Mode Determination → Subagent Dispatch
+/agentic → State Detection → Mode Determination → Subagent Dispatch
                 ↓
         SPEC/PLAN → agent-planner
         BUILD → agent-executor

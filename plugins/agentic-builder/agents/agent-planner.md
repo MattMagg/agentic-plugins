@@ -250,7 +250,7 @@ When complete, output:
 - [file path]
 
 **Next Step:**
-Run `/agent` to continue to [next phase]
+Run `/agentic` to continue to [next phase]
 ```
 
 ---

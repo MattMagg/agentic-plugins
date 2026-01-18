@@ -1,5 +1,5 @@
 ---
-name: agent
+name: agentic
 description: Build agentic systems - auto-detects framework and adapts to task type
 argument-hint: [task] [--framework <name>] [--debug] [--spec] [--plan]
 ---
@@ -182,7 +182,7 @@ Task:
        g. If passes: Update .claude/agentic-builder.local.md last_completed_step
     3. Log progress to agentic-builder/[feature]/session.md
 
-    STOP on first failure. User can run /agent --debug to investigate.
+    STOP on first failure. User can run /agentic --debug to investigate.
 ```
 
 ### DEBUG Mode → agent-debugger
@@ -227,7 +227,7 @@ After subagent returns:
 - [list of files]
 
 **Next Steps:**
-- [what to do next, e.g., "Run /agent to continue to PLAN phase"]
+- [what to do next, e.g., "Run /agentic to continue to PLAN phase"]
 ```
 
 ## Available MCP Tools

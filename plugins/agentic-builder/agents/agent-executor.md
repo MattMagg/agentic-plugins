@@ -109,7 +109,7 @@ Execute the verification command from the plan:
    **Error:** [error message]
 
    **Suggested Action:**
-   Run `/agent --debug` to investigate and fix the issue.
+   Run `/agentic --debug` to investigate and fix the issue.
    ```
 
 ### Step 3: Completion
@@ -128,7 +128,7 @@ When all steps complete:
 
 **Next Steps:**
 1. Test the agent: `[test command]`
-2. Run `/agent --debug` if issues arise
+2. Run `/agentic --debug` if issues arise
 ```
 
 ---
