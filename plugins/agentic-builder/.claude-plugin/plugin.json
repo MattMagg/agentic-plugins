@@ -8,5 +8,6 @@
   "keywords": ["agents", "adk", "openai", "langchain", "langgraph", "crewai", "anthropic", "rag", "multi-agent"],
   "license": "MIT",
   "commands": "./commands",
-  "hooks": "./hooks/hooks.json"
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json"
 }
